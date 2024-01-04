@@ -2,7 +2,7 @@ package main
 
 import (
 	"go-lms/config"
-	"go-lms/handlers"
+	"go-lms/route"
 	"log"
 
 	"github.com/gofiber/fiber/v2"
@@ -11,6 +11,6 @@ import (
 func main() {
 	app := fiber.New()
 	config.Connect()
-	app.Get("/authors", handlers.GetAuthor)
+	route.Setup(app)
 	log.Fatal(app.Listen(":8080"))
 }
