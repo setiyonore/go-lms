@@ -19,4 +19,7 @@ func NewAuthorRoute(app fiber.Router) {
 	app.Get("/authors/:id", func(ctx *fiber.Ctx) error {
 		return authorHandler.GetAuthorByID(ctx)
 	})
+	app.Post("/authors", func(ctx *fiber.Ctx) error {
+		return authorHandler.AddAuthor(ctx)
+	})
 }

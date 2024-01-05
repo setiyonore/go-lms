@@ -9,6 +9,7 @@ import (
 type Author interface {
 	GetAuthor() ([]entities.Author, error)
 	GetAuthorByID(ID int) (entities.Author, error)
+	AddAuhtor(input entities.AddAuthorInput) error
 }
 
 type author struct {
@@ -37,4 +38,15 @@ func (a *author) GetAuthorByID(ID int) (entities.Author, error) {
 		return author, err
 	}
 	return author, nil
+}
+
+func (a *author) AddAuhtor(input entities.AddAuthorInput) error {
+	author := entities.Author{}
+	author.Name = input.Name
+	err := a.authorRepository.Save(author)
+	if err != nil {
+		return err
+	}
+	return nil
+
 }

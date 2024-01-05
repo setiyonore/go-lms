@@ -38,3 +38,19 @@ func (h *AuthorHandler) GetAuthorByID(ctx *fiber.Ctx) error {
 	response := helper.APIResponse("Author", fiber.StatusOK, "Success", entities.FormatAuthor(author))
 	return ctx.Status(fiber.StatusOK).JSON(response)
 }
+
+func (h *AuthorHandler) AddAuthor(ctx *fiber.Ctx) error {
+	var input entities.AddAuthorInput
+	err := ctx.BodyParser(&input)
+	if err != nil {
+		response := helper.APIResponse("Failed to save author", fiber.StatusBadRequest, "error", nil)
+		return ctx.Status(fiber.StatusBadRequest).JSON(response)
+	}
+	err = h.authorService.AddAuhtor(input)
+	if err != nil {
+		response := helper.APIResponse("Failed to save author", fiber.StatusBadRequest, "error", nil)
+		return ctx.Status(fiber.StatusBadRequest).JSON(response)
+	}
+	response := helper.APIResponse("Success save author", fiber.StatusOK, "success", nil)
+	return ctx.Status(fiber.StatusOK).JSON(response)
+}

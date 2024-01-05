@@ -1,11 +1,16 @@
 package entities
 
+import "time"
+
 type Author struct {
-	Id        int    `json:"id"`
-	Name      string `json:"name"`
-	CreatedAt string `json:"-"`
-	UpdatedAt string `json:"-"`
-	DeletedAt string `json:"-"`
+	Id        int       `json:"id"`
+	Name      string    `json:"name"`
+	CreatedAt time.Time `json:"-"`
+	UpdatedAt time.Time `json:"-"`
+	DeletedAt time.Time `json:"-"`
+}
+type AddAuthorInput struct {
+	Name string `json:"name"`
 }
 
 func FormatAuthor(author Author) Author {
