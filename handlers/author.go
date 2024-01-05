@@ -1,12 +1,13 @@
 package handlers
 
 import (
+	"fmt"
+	"github.com/go-playground/validator/v10"
+	"github.com/gofiber/fiber/v2"
 	"go-lms/entities"
 	"go-lms/helper"
 	"go-lms/service"
 	"strconv"
-
-	"github.com/gofiber/fiber/v2"
 )
 
 type AuthorHandler struct {
@@ -43,7 +44,18 @@ func (h *AuthorHandler) AddAuthor(ctx *fiber.Ctx) error {
 	var input entities.AddAuthorInput
 	err := ctx.BodyParser(&input)
 	if err != nil {
-		response := helper.APIResponse("Failed to save author", fiber.StatusBadRequest, "error", nil)
+		response := helper.APIResponse("Failed parse data", fiber.StatusBadRequest, "error", nil)
+		return ctx.Status(fiber.StatusBadRequest).JSON(response)
+	}
+	validate := validator.New()
+	err = validate.Struct(&input)
+	var listError []string
+	if err != nil {
+		validationErrors := err.(validator.ValidationErrors)
+		for _, fieldError := range validationErrors {
+			listError = append(listError, fmt.Sprintf("error %s must be %s %s", fieldError.Field(), fieldError.Tag(), fieldError.Param()))
+		}
+		response := helper.APIResponse(listError, fiber.StatusBadRequest, "error", nil)
 		return ctx.Status(fiber.StatusBadRequest).JSON(response)
 	}
 	err = h.authorService.AddAuhtor(input)
@@ -61,6 +73,17 @@ func (h *AuthorHandler) UpdateAuthor(ctx *fiber.Ctx) error {
 	err := ctx.BodyParser(&input)
 	if err != nil {
 		response := helper.APIResponse("Failed Parse data", fiber.StatusBadRequest, "error", nil)
+		return ctx.Status(fiber.StatusBadRequest).JSON(response)
+	}
+	validate := validator.New()
+	err = validate.Struct(&input)
+	var listError []string
+	if err != nil {
+		validationErrors := err.(validator.ValidationErrors)
+		for _, fieldError := range validationErrors {
+			listError = append(listError, fmt.Sprintf("error %s must be %s %s", fieldError.Field(), fieldError.Tag(), fieldError.Param()))
+		}
+		response := helper.APIResponse(listError, fiber.StatusBadRequest, "error", nil)
 		return ctx.Status(fiber.StatusBadRequest).JSON(response)
 	}
 	err = h.authorService.UpdateAuthor(Id, input)

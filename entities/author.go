@@ -13,7 +13,7 @@ type Author struct {
 	DeletedAt gorm.DeletedAt `json:"-"`
 }
 type AddAuthorInput struct {
-	Name string `json:"name"`
+	Name string `json:"name" validate:"required,min=3"`
 }
 
 func FormatAuthor(author Author) Author {
