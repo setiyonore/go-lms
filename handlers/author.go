@@ -1,6 +1,8 @@
 package handlers
 
 import (
+	"go-lms/entities"
+	"go-lms/helper"
 	"go-lms/service"
 
 	"github.com/gofiber/fiber/v2"
@@ -18,7 +20,9 @@ func (h *AuthorHandler) GetAuthor(ctx *fiber.Ctx) error {
 	//config.Database.Find(&authors)
 	authors, err := h.authorService.GetAuthor()
 	if err != nil {
-		return ctx.Status(fiber.StatusInternalServerError).JSON(authors)
+		response := helper.APIResponse("Error to get author", fiber.StatusInternalServerError, "error", nil)
+		return ctx.Status(fiber.StatusInternalServerError).JSON(response)
 	}
-	return ctx.Status(fiber.StatusOK).JSON(authors)
+	response := helper.APIResponse("List Of Author", fiber.StatusOK, "Success", entities.FormatAuthors(authors))
+	return ctx.Status(fiber.StatusOK).JSON(response)
 }

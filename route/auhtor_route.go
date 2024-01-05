@@ -9,7 +9,8 @@ import (
 )
 
 func NewAuthorRoute(app fiber.Router) {
-	authorRepository := repository.NewAuthor(config.Database)
+	db := *config.Database
+	authorRepository := repository.NewAuthor(&db)
 	authorService := service.NewAuthor(authorRepository)
 	authorHandler := handlers.NewAuthorHandler(authorService)
 	app.Get("/authors", func(ctx *fiber.Ctx) error {
