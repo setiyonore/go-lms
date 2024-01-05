@@ -54,3 +54,31 @@ func (h *AuthorHandler) AddAuthor(ctx *fiber.Ctx) error {
 	response := helper.APIResponse("Success save author", fiber.StatusOK, "success", nil)
 	return ctx.Status(fiber.StatusOK).JSON(response)
 }
+
+func (h *AuthorHandler) UpdateAuthor(ctx *fiber.Ctx) error {
+	Id, _ := strconv.Atoi(ctx.Params("id"))
+	var input entities.AddAuthorInput
+	err := ctx.BodyParser(&input)
+	if err != nil {
+		response := helper.APIResponse("Failed Parse data", fiber.StatusBadRequest, "error", nil)
+		return ctx.Status(fiber.StatusBadRequest).JSON(response)
+	}
+	err = h.authorService.UpdateAuthor(Id, input)
+	if err != nil {
+		response := helper.APIResponse("Failed Update author", fiber.StatusBadRequest, "error", nil)
+		return ctx.Status(fiber.StatusBadRequest).JSON(response)
+	}
+	response := helper.APIResponse("Success update author", fiber.StatusOK, "success", nil)
+	return ctx.Status(fiber.StatusOK).JSON(response)
+}
+
+func (h *AuthorHandler) DeleteAuthor(ctx *fiber.Ctx) error {
+	Id, _ := strconv.Atoi(ctx.Params("id"))
+	err := h.authorService.DeleteAuthor(Id)
+	if err != nil {
+		response := helper.APIResponse("Failed delete author", fiber.StatusInternalServerError, "error", nil)
+		return ctx.Status(fiber.StatusInternalServerError).JSON(response)
+	}
+	response := helper.APIResponse("Success delete author", fiber.StatusOK, "success", nil)
+	return ctx.Status(fiber.StatusOK).JSON(response)
+}

@@ -22,4 +22,10 @@ func NewAuthorRoute(app fiber.Router) {
 	app.Post("/authors", func(ctx *fiber.Ctx) error {
 		return authorHandler.AddAuthor(ctx)
 	})
+	app.Put("/authors/:id", func(ctx *fiber.Ctx) error {
+		return authorHandler.UpdateAuthor(ctx)
+	})
+	app.Delete("/authors/:id", func(ctx *fiber.Ctx) error {
+		return authorHandler.DeleteAuthor(ctx)
+	})
 }

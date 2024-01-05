@@ -1,13 +1,16 @@
 package entities
 
-import "time"
+import (
+	"gorm.io/gorm"
+	"time"
+)
 
 type Author struct {
-	Id        int       `json:"id"`
-	Name      string    `json:"name"`
-	CreatedAt time.Time `json:"-"`
-	UpdatedAt time.Time `json:"-"`
-	DeletedAt time.Time `json:"-"`
+	Id        int            `json:"id"`
+	Name      string         `json:"name"`
+	CreatedAt time.Time      `json:"-"`
+	UpdatedAt time.Time      `json:"-"`
+	DeletedAt gorm.DeletedAt `json:"-"`
 }
 type AddAuthorInput struct {
 	Name string `json:"name"`
