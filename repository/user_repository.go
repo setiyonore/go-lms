@@ -18,6 +18,10 @@ func NewUserRepository(db *gorm.DB) *user {
 }
 
 func (u *user) FindAll() ([]entities.User, error) {
-
-	return nil, nil
+	var users []entities.User
+	err := u.db.Find(&users).Error
+	if err != nil {
+		return users, err
+	}
+	return users, nil
 }
