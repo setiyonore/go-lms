@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"fmt"
 	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"
 	"go-lms/entities"
@@ -49,13 +48,8 @@ func (h *AuthorHandler) AddAuthor(ctx *fiber.Ctx) error {
 	}
 	validate := validator.New()
 	err = validate.Struct(&input)
-	var listError []string
 	if err != nil {
-		validationErrors := err.(validator.ValidationErrors)
-		for _, fieldError := range validationErrors {
-			listError = append(listError, fmt.Sprintf("error %s must be %s %s", fieldError.Field(), fieldError.Tag(), fieldError.Param()))
-		}
-		response := helper.APIResponse(listError, fiber.StatusBadRequest, "error", nil)
+		response := helper.APIResponse(helper.FormatterError(err.(validator.ValidationErrors)), fiber.StatusBadRequest, "error", nil)
 		return ctx.Status(fiber.StatusBadRequest).JSON(response)
 	}
 	err = h.authorService.AddAuhtor(input)
@@ -77,13 +71,8 @@ func (h *AuthorHandler) UpdateAuthor(ctx *fiber.Ctx) error {
 	}
 	validate := validator.New()
 	err = validate.Struct(&input)
-	var listError []string
 	if err != nil {
-		validationErrors := err.(validator.ValidationErrors)
-		for _, fieldError := range validationErrors {
-			listError = append(listError, fmt.Sprintf("error %s must be %s %s", fieldError.Field(), fieldError.Tag(), fieldError.Param()))
-		}
-		response := helper.APIResponse(listError, fiber.StatusBadRequest, "error", nil)
+		response := helper.APIResponse(helper.FormatterError(err.(validator.ValidationErrors)), fiber.StatusBadRequest, "error", nil)
 		return ctx.Status(fiber.StatusBadRequest).JSON(response)
 	}
 	err = h.authorService.UpdateAuthor(Id, input)
