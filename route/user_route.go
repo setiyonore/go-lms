@@ -23,4 +23,7 @@ func NewUserRoute(app fiber.Router) {
 	app.Post("/users/getByEmail", func(ctx *fiber.Ctx) error {
 		return userHandler.GetUserByEmail(ctx)
 	})
+	app.Post("/users", func(ctx *fiber.Ctx) error {
+		return userHandler.AddUser(ctx)
+	})
 }

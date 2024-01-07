@@ -9,6 +9,7 @@ type User interface {
 	FindAll() ([]entities.User, error)
 	FindById(Id int) (entities.User, error)
 	FindByEmail(Email string) (entities.User, error)
+	Save(User entities.User) error
 }
 
 type user struct {
@@ -43,4 +44,11 @@ func (u *user) FindByEmail(Email string) (entities.User, error) {
 		return user, err
 	}
 	return user, nil
+}
+func (u *user) Save(User entities.User) error {
+	err := u.db.Save(&User).Error
+	if err != nil {
+		return err
+	}
+	return nil
 }
