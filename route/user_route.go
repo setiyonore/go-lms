@@ -1,11 +1,12 @@
 package route
 
 import (
-	"github.com/gofiber/fiber/v2"
 	"go-lms/config"
 	"go-lms/handlers"
 	"go-lms/repository"
 	"go-lms/service"
+
+	"github.com/gofiber/fiber/v2"
 )
 
 func NewUserRoute(app fiber.Router) {
@@ -18,5 +19,8 @@ func NewUserRoute(app fiber.Router) {
 	})
 	app.Get("/users/:id", func(ctx *fiber.Ctx) error {
 		return userHandler.GetUserById(ctx)
+	})
+	app.Post("/users/getByEmail", func(ctx *fiber.Ctx) error {
+		return userHandler.GetUserByEmail(ctx)
 	})
 }

@@ -1,8 +1,9 @@
 package entities
 
 import (
-	"gorm.io/gorm"
 	"time"
+
+	"gorm.io/gorm"
 )
 
 type User struct {
@@ -13,6 +14,9 @@ type User struct {
 	CreatedAt time.Time      `json:"-"`
 	UpdatedAt time.Time      `json:"-"`
 	DeletedAt gorm.DeletedAt `json:"-"`
+}
+type GetUserByEmailInput struct {
+	Email string `json:"email" validate:"required,email"`
 }
 
 func FormatUser(user User) User {

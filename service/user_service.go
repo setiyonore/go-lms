@@ -34,3 +34,11 @@ func (u *user) GetUserById(Id int) (entities.User, error) {
 	}
 	return user, nil
 }
+
+func (u *user) GetUserByEmail(Email string) (entities.User, error) {
+	user, err := u.userRepository.FindByEmail(Email)
+	if err != nil {
+		return user, err
+	}
+	return user, nil
+}
