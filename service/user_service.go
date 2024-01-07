@@ -7,6 +7,8 @@ import (
 
 type User interface {
 	GetAllUser() ([]entities.User, error)
+	GetUserById(Id int) (entities.User, error)
+	GetUserByEmail(Email string) (entities.User, error)
 }
 
 type user struct {
@@ -23,4 +25,12 @@ func (u *user) GetAllUser() ([]entities.User, error) {
 		return users, err
 	}
 	return users, err
+}
+
+func (u *user) GetUserById(Id int) (entities.User, error) {
+	user, err := u.userRepository.FindById(Id)
+	if err != nil {
+		return user, err
+	}
+	return user, nil
 }

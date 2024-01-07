@@ -16,4 +16,7 @@ func NewUserRoute(app fiber.Router) {
 	app.Get("/users", func(ctx *fiber.Ctx) error {
 		return userHandler.GetAllUser(ctx)
 	})
+	app.Get("/users/:id", func(ctx *fiber.Ctx) error {
+		return userHandler.GetUserById(ctx)
+	})
 }
