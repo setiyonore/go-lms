@@ -14,6 +14,7 @@ type User interface {
 	AddUser(Input entities.AddUserInput) error
 	IsEmailAvailable(Email string) (bool, error)
 	UpdateUser(inputID int, inputData entities.AddUserInput) error
+	DeleteUser(id int) error
 }
 
 type user struct {
@@ -91,6 +92,21 @@ func (u *user) UpdateUser(inputId int, inputData entities.AddUserInput) error {
 	}
 	user.Password = string(passwordHash)
 	err = u.userRepository.Update(user)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (u *user) DeleteUser(id int) error {
+	user, err := u.userRepository.FindById(id)
+	if err != nil {
+		return err
+	}
+	if user.ID == 0 {
+		return errors.New("data not found")
+	}
+	err = u.userRepository.Delete(id)
 	if err != nil {
 		return err
 	}

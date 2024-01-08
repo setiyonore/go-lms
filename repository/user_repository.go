@@ -11,6 +11,7 @@ type User interface {
 	FindByEmail(Email string) (entities.User, error)
 	Save(User entities.User) error
 	Update(User entities.User) error
+	Delete(id int) error
 }
 
 type user struct {
@@ -59,4 +60,18 @@ func (u *user) Update(User entities.User) error {
 		return err
 	}
 	return nil
+}
+
+func (u *user) Delete(id int) error {
+	var user entities.User
+	err := u.db.Where("id", id).First(&user).Error
+	if err != nil {
+		return err
+	}
+	err = u.db.Delete(&user).Error
+	if err != nil {
+		return err
+	}
+	return nil
+
 }

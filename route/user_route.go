@@ -29,4 +29,7 @@ func NewUserRoute(app fiber.Router) {
 	app.Put("/users/:id", func(ctx *fiber.Ctx) error {
 		return userHandler.UpdateUser(ctx)
 	})
+	app.Delete("/users/:id", func(ctx *fiber.Ctx) error {
+		return userHandler.DeleteUser(ctx)
+	})
 }

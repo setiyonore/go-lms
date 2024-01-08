@@ -110,3 +110,14 @@ func (u *UserHandler) UpdateUser(ctx *fiber.Ctx) error {
 	response := helper.APIResponse("success update user", fiber.StatusOK, "success", nil)
 	return ctx.Status(fiber.StatusOK).JSON(response)
 }
+
+func (u *UserHandler) DeleteUser(ctx *fiber.Ctx) error {
+	Id, _ := strconv.Atoi(ctx.Params("id"))
+	err := u.userService.DeleteUser(Id)
+	if err != nil {
+		response := helper.APIResponse("failed delete user", fiber.StatusInternalServerError, "error", nil)
+		return ctx.Status(fiber.StatusInternalServerError).JSON(response)
+	}
+	response := helper.APIResponse("success delete user", fiber.StatusOK, "success", nil)
+	return ctx.Status(fiber.StatusOK).JSON(response)
+}
