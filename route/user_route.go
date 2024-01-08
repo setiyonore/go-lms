@@ -26,4 +26,7 @@ func NewUserRoute(app fiber.Router) {
 	app.Post("/users", func(ctx *fiber.Ctx) error {
 		return userHandler.AddUser(ctx)
 	})
+	app.Put("/users/:id", func(ctx *fiber.Ctx) error {
+		return userHandler.UpdateUser(ctx)
+	})
 }

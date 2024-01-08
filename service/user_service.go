@@ -1,6 +1,7 @@
 package service
 
 import (
+	"errors"
 	"go-lms/entities"
 	"go-lms/repository"
 	"golang.org/x/crypto/bcrypt"
@@ -12,6 +13,7 @@ type User interface {
 	GetUserByEmail(Email string) (entities.User, error)
 	AddUser(Input entities.AddUserInput) error
 	IsEmailAvailable(Email string) (bool, error)
+	UpdateUser(inputID int, inputData entities.AddUserInput) error
 }
 
 type user struct {
@@ -71,4 +73,26 @@ func (u *user) IsEmailAvailable(Email string) (bool, error) {
 		return true, nil
 	}
 	return false, nil
+}
+
+func (u *user) UpdateUser(inputId int, inputData entities.AddUserInput) error {
+	user, err := u.userRepository.FindById(inputId)
+	if err != nil {
+		return err
+	}
+	if user.ID == 0 {
+		return errors.New("data not found")
+	}
+	user.Name = inputData.Name
+	user.Email = inputData.Email
+	passwordHash, err := bcrypt.GenerateFromPassword([]byte(inputData.Password), bcrypt.MinCost)
+	if err != nil {
+		return err
+	}
+	user.Password = string(passwordHash)
+	err = u.userRepository.Update(user)
+	if err != nil {
+		return err
+	}
+	return nil
 }
