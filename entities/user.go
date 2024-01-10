@@ -18,10 +18,7 @@ type User struct {
 type GetUserByEmailInput struct {
 	Email string `json:"email" validate:"required,email"`
 }
-type LoginInput struct {
-	Email    string `json:"email" validate:"required,email"`
-	Password string `json:"password" validate:"required,min=8"`
-}
+
 type AddUserInput struct {
 	Name     string `json:"name" validate:"required,min=3"`
 	Email    string `json:"email" validate:"required,email"`

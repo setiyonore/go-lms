@@ -16,7 +16,6 @@ type User interface {
 	IsEmailAvailable(Email string) (bool, error)
 	UpdateUser(inputID int, inputData entities.AddUserInput) error
 	DeleteUser(id int) error
-	Login(input entities.LoginInput) (entities.User, error)
 }
 
 type user struct {
@@ -113,22 +112,4 @@ func (u *user) DeleteUser(id int) error {
 		return err
 	}
 	return nil
-}
-
-func (u *user) Login(input entities.LoginInput) (entities.User, error) {
-	email := input.Email
-	password := input.Password
-
-	user, err := u.userRepository.FindByEmail(email)
-	if err != nil {
-		return user, err
-	}
-	if user.ID == 0 {
-		return user, errors.New("user not found")
-	}
-	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password))
-	if err != nil {
-		return user, err
-	}
-	return user, nil
 }
