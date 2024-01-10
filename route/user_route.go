@@ -3,6 +3,7 @@ package route
 import (
 	"go-lms/config"
 	"go-lms/handlers"
+	"go-lms/helper"
 	"go-lms/repository"
 	"go-lms/service"
 
@@ -11,9 +12,10 @@ import (
 
 func NewUserRoute(app fiber.Router) {
 	db := *config.Database
+	authJwt := helper.NewAuth()
 	userRepository := repository.NewUserRepository(&db)
 	userService := service.NewUser(userRepository)
-	userHandler := handlers.NewUserHandler(userService)
+	userHandler := handlers.NewUserHandler(userService, authJwt)
 	app.Get("/users", func(ctx *fiber.Ctx) error {
 		return userHandler.GetAllUser(ctx)
 	})
