@@ -5,9 +5,11 @@ import (
 	"go-lms/helper"
 	"go-lms/service"
 	"strconv"
+	"time"
 
 	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"
+	"github.com/golang-jwt/jwt/v5"
 )
 
 type UserHandler struct {
@@ -119,5 +121,42 @@ func (u *UserHandler) DeleteUser(ctx *fiber.Ctx) error {
 		return ctx.Status(fiber.StatusInternalServerError).JSON(response)
 	}
 	response := helper.APIResponse("success delete user", fiber.StatusOK, "success", nil)
+	return ctx.Status(fiber.StatusOK).JSON(response)
+}
+
+func (u *UserHandler) Login(ctx *fiber.Ctx) error {
+	var intput entities.LoginInput
+	err := ctx.BodyParser(&intput)
+	if err != nil {
+		response := helper.APIResponse("failed parse data ", fiber.StatusBadRequest, "error", nil)
+		return ctx.Status(fiber.StatusBadRequest).JSON(response)
+	}
+	validate := validator.New()
+	err = validate.Struct(&intput)
+	if err != nil {
+		response := helper.APIResponse(helper.FormatterError(err.(validator.ValidationErrors)), fiber.StatusBadRequest, "error", nil)
+		return ctx.Status(fiber.StatusBadRequest).JSON(response)
+	}
+	user, err := u.userService.Login(intput)
+	if err != nil {
+		response := helper.APIResponse("failed to login", fiber.StatusInternalServerError, "error", nil)
+		return ctx.Status(fiber.StatusInternalServerError).JSON(response)
+	}
+	// Create the Claims
+	claims := jwt.MapClaims{
+		"name":  user.Name,
+		"email": user.Email,
+		"exp":   time.Now().Add(time.Hour * 72).Unix(),
+	}
+
+	// Create token
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+	// Generate encoded token and send it as response.
+	t, err := token.SignedString([]byte("secret"))
+	if err != nil {
+		response := helper.APIResponse("failed to login", fiber.StatusInternalServerError, "error", nil)
+		return ctx.Status(fiber.StatusInternalServerError).JSON(response)
+	}
+	response := helper.APIResponse("success login", fiber.StatusOK, "success", fiber.Map{"token": t})
 	return ctx.Status(fiber.StatusOK).JSON(response)
 }

@@ -32,4 +32,7 @@ func NewUserRoute(app fiber.Router) {
 	app.Delete("/users/:id", func(ctx *fiber.Ctx) error {
 		return userHandler.DeleteUser(ctx)
 	})
+	app.Post("/users/login", func(c *fiber.Ctx) error {
+		return userHandler.Login(c)
+	})
 }
