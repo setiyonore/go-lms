@@ -17,4 +17,7 @@ func NewPublihserRoute(app fiber.Router) {
 	app.Get("/publishers", func(c *fiber.Ctx) error {
 		return publisherHandler.GetAll(c)
 	})
+	app.Get("/publishers/:id", func(c *fiber.Ctx) error {
+		return publisherHandler.GetById(c)
+	})
 }

@@ -8,6 +8,7 @@ import (
 
 type Publisher interface {
 	FindAll() ([]entities.Publisher, error)
+	FindById(id int) (entities.Publisher, error)
 }
 
 type publisher struct {
@@ -25,4 +26,14 @@ func (p *publisher) FindAll() ([]entities.Publisher, error) {
 		return publishers, err
 	}
 	return publishers, nil
+}
+
+func (p *publisher) FindById(id int) (entities.Publisher, error) {
+	var publisher entities.Publisher
+
+	err := p.db.Where("id=?", id).Find(&publisher).Error
+	if err != nil {
+		return publisher, err
+	}
+	return publisher, nil
 }
