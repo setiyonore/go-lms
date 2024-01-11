@@ -12,6 +12,7 @@ func Setup(app *fiber.App) {
 	publicRoute := apiRoute.Group("/")
 	NewAuthRoute(publicRoute)
 	privateRoute := apiRoute.Group("/", middleware.AuthMiddleware())
+	NewPublihserRoute(privateRoute)
 	NewAuthorRoute(privateRoute)
 	NewUserRoute(privateRoute)
 }
