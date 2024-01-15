@@ -9,6 +9,9 @@ import (
 type Publisher interface {
 	GetAll() ([]entities.Publisher, error)
 	GetById(id int) (entities.Publisher, error)
+	AddPublisher(input entities.AddPublisherInput) error
+	UpdatePublisher(inputID int, inputData entities.AddPublisherInput) error
+	DeletePublisher(id int) error
 }
 
 type publiser struct {
@@ -37,4 +40,45 @@ func (p *publiser) GetById(id int) (entities.Publisher, error) {
 		return publiser, err
 	}
 	return publiser, nil
+}
+
+func (p *publiser) AddPublisher(input entities.AddPublisherInput) error {
+	publiser := entities.Publisher{}
+	publiser.Name = input.Name
+	err := p.publisherRepository.Save(publiser)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (p *publiser) UpdatePublisher(inputID int, inputData entities.AddPublisherInput) error {
+	publisher, err := p.publisherRepository.FindById(inputID)
+	if err != nil {
+		return err
+	}
+	if publisher.Id == 0 {
+		return errors.New("data not found")
+	}
+	publisher.Name = inputData.Name
+	err = p.publisherRepository.Update(publisher)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (p *publiser) DeletePublisher(id int) error {
+	publisher, err := p.publisherRepository.FindById(id)
+	if err != nil {
+		return err
+	}
+	if publisher.Id == 0 {
+		return errors.New("data not found")
+	}
+	err = p.publisherRepository.Delete(id)
+	if err != nil {
+		return err
+	}
+	return nil
 }

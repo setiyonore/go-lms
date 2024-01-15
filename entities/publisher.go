@@ -10,8 +10,11 @@ type Publisher struct {
 	Id        int            `json:"id"`
 	Name      string         `json:"name"`
 	CreatedAt time.Time      `json:"-"`
-	UPdatedAt time.Time      `json:"-"`
+	UpdatedAt time.Time      `json:"-"`
 	DeletedAt gorm.DeletedAt `json:"-"`
+}
+type AddPublisherInput struct {
+	Name string `json:"name" validate:"required,min=3"`
 }
 
 func FormatterPublisher(publisher Publisher) Publisher {

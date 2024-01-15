@@ -20,4 +20,13 @@ func NewPublihserRoute(app fiber.Router) {
 	app.Get("/publishers/:id", func(c *fiber.Ctx) error {
 		return publisherHandler.GetById(c)
 	})
+	app.Post("/publishers", func(c *fiber.Ctx) error {
+		return publisherHandler.AddPublisher(c)
+	})
+	app.Put("/publishers/:id", func(c *fiber.Ctx) error {
+		return publisherHandler.UpdatePublisher(c)
+	})
+	app.Delete("/publishers/:id", func(c *fiber.Ctx) error {
+		return publisherHandler.DeletePublisher(c)
+	})
 }
