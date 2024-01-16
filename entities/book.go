@@ -23,6 +23,17 @@ type Book struct {
 	Author            Author         `gorm:"foreignkey:AuthorID"`
 }
 
+type AddBookInput struct {
+	Name              string `json:"name" validate:"required,min=3"`
+	Description       string `json:"description" validate:"required"`
+	AuthorID          uint   `json:"author_id" validate:"required,min=1"`
+	PublisherID       uint   `json:"publisher_id" validate:"required"`
+	Isbn              string `json:"isbn" validate:"required"`
+	YearOfPublication string `json:"year_of_publication" validate:"required"`
+	ImgUrlThumbnail   string `json:"img_url_thumbnail"`
+	ImgUrlCover       string `json:"img_url_cover"`
+}
+
 func FormatBook(book Book) Book {
 	bookFormatter := Book{}
 	bookFormatter.ID = book.ID

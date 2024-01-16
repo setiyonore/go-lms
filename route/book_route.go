@@ -20,4 +20,13 @@ func NewBoookRoute(app fiber.Router) {
 	app.Get("/books/:id", func(c *fiber.Ctx) error {
 		return bookHandler.GetBookById(c)
 	})
+	app.Post("/books", func(c *fiber.Ctx) error {
+		return bookHandler.AddBook(c)
+	})
+	app.Put("/books/:id", func(c *fiber.Ctx) error {
+		return bookHandler.UpdateBook(c)
+	})
+	app.Delete("/books/:id", func(c *fiber.Ctx) error {
+		return bookHandler.DeleteBook(c)
+	})
 }

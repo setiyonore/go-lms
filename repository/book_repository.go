@@ -9,6 +9,9 @@ import (
 type Book interface {
 	FindAll() ([]entities.Book, error)
 	FindById(id int) (entities.Book, error)
+	Save(book entities.Book) error
+	Update(book entities.Book) error
+	Delete(id int) error
 }
 
 type book struct {
@@ -35,4 +38,33 @@ func (b *book) FindById(id int) (entities.Book, error) {
 		return book, err
 	}
 	return book, nil
+}
+
+func (b *book) Save(book entities.Book) error {
+	err := b.db.Save(&book).Error
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (b *book) Update(book entities.Book) error {
+	err := b.db.Save(&book).Error
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (b *book) Delete(id int) error {
+	var book entities.Book
+	err := b.db.Where("id", id).First(&book).Error
+	if err != nil {
+		return err
+	}
+	err = b.db.Delete(&book).Error
+	if err != nil {
+		return err
+	}
+	return nil
 }
