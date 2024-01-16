@@ -35,7 +35,7 @@ func (p *publiser) GetById(id int) (entities.Publisher, error) {
 	if err != nil {
 		return publiser, err
 	}
-	if publiser.Id == 0 {
+	if publiser.ID == 0 {
 		err = errors.New("data not found")
 		return publiser, err
 	}
@@ -57,7 +57,7 @@ func (p *publiser) UpdatePublisher(inputID int, inputData entities.AddPublisherI
 	if err != nil {
 		return err
 	}
-	if publisher.Id == 0 {
+	if publisher.ID == 0 {
 		return errors.New("data not found")
 	}
 	publisher.Name = inputData.Name
@@ -73,7 +73,7 @@ func (p *publiser) DeletePublisher(id int) error {
 	if err != nil {
 		return err
 	}
-	if publisher.Id == 0 {
+	if publisher.ID == 0 {
 		return errors.New("data not found")
 	}
 	err = p.publisherRepository.Delete(id)

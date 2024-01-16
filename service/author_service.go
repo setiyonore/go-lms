@@ -35,7 +35,7 @@ func (a *author) GetAuthorByID(ID int) (entities.Author, error) {
 	if err != nil {
 		return author, err
 	}
-	if author.Id == 0 {
+	if author.ID == 0 {
 		err = errors.New("data not found")
 		return author, err
 	}
@@ -58,7 +58,7 @@ func (a *author) UpdateAuthor(inputID int, inputData entities.AddAuthorInput) er
 	if err != nil {
 		return err
 	}
-	if author.Id == 0 {
+	if author.ID == 0 {
 		return errors.New("data not found")
 	}
 	author.Name = inputData.Name
@@ -74,7 +74,7 @@ func (a *author) DeleteAuthor(ID int) error {
 	if err != nil {
 		return err
 	}
-	if author.Id == 0 {
+	if author.ID == 0 {
 		return errors.New("data not found")
 	}
 	err = a.authorRepository.Delete(ID)

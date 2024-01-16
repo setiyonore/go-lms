@@ -1,16 +1,17 @@
 package entities
 
 import (
-	"gorm.io/gorm"
 	"time"
+
+	"gorm.io/gorm"
 )
 
 type Author struct {
-	Id        int            `json:"id"`
+	ID        uint           `json:"id" gorm:"primary_key"`
 	Name      string         `json:"name"`
 	CreatedAt time.Time      `json:"-"`
 	UpdatedAt time.Time      `json:"-"`
-	DeletedAt gorm.DeletedAt `json:"-"`
+	DeletedAt gorm.DeletedAt `json:"-" gorm:"index"`
 }
 type AddAuthorInput struct {
 	Name string `json:"name" validate:"required,min=3"`
@@ -18,7 +19,7 @@ type AddAuthorInput struct {
 
 func FormatAuthor(author Author) Author {
 	authorFormatter := Author{}
-	authorFormatter.Id = author.Id
+	authorFormatter.ID = author.ID
 	authorFormatter.Name = author.Name
 	return authorFormatter
 }

@@ -7,11 +7,11 @@ import (
 )
 
 type Publisher struct {
-	Id        int            `json:"id"`
+	ID        uint           `json:"id" gorm:"primary_key"`
 	Name      string         `json:"name"`
 	CreatedAt time.Time      `json:"-"`
 	UpdatedAt time.Time      `json:"-"`
-	DeletedAt gorm.DeletedAt `json:"-"`
+	DeletedAt gorm.DeletedAt `json:"-" gorm:"index"`
 }
 type AddPublisherInput struct {
 	Name string `json:"name" validate:"required,min=3"`
@@ -19,7 +19,7 @@ type AddPublisherInput struct {
 
 func FormatterPublisher(publisher Publisher) Publisher {
 	publisherFormatter := Publisher{}
-	publisherFormatter.Id = publisher.Id
+	publisherFormatter.ID = publisher.ID
 	publisherFormatter.Name = publisher.Name
 	return publisherFormatter
 }
