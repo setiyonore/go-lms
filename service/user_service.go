@@ -54,6 +54,7 @@ func (u *user) AddUser(Input entities.AddUserInput) error {
 	user := entities.User{}
 	user.Name = Input.Name
 	user.Email = Input.Email
+	user.Role = Input.Role
 	passwordHash, err := bcrypt.GenerateFromPassword([]byte(Input.Password), bcrypt.MinCost)
 	if err != nil {
 		return err
@@ -87,6 +88,7 @@ func (u *user) UpdateUser(inputId int, inputData entities.AddUserInput) error {
 	}
 	user.Name = inputData.Name
 	user.Email = inputData.Email
+	user.Role = inputData.Role
 	passwordHash, err := bcrypt.GenerateFromPassword([]byte(inputData.Password), bcrypt.MinCost)
 	if err != nil {
 		return err

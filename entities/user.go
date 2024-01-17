@@ -11,6 +11,7 @@ type User struct {
 	Name      string         `json:"name"`
 	Email     string         `json:"email"`
 	Password  string         `json:"-"`
+	Role      int            `json:"role"`
 	CreatedAt time.Time      `json:"-"`
 	UpdatedAt time.Time      `json:"-"`
 	DeletedAt gorm.DeletedAt `json:"-"`
@@ -23,6 +24,7 @@ type AddUserInput struct {
 	Name     string `json:"name" validate:"required,min=3"`
 	Email    string `json:"email" validate:"required,email"`
 	Password string `json:"password" validate:"required,min=8"`
+	Role     int    `json:"role"`
 }
 
 func FormatUser(user User) User {
@@ -30,6 +32,7 @@ func FormatUser(user User) User {
 	userFormatter.ID = user.ID
 	userFormatter.Name = user.Name
 	userFormatter.Email = user.Email
+	userFormatter.Role = user.Role
 	return userFormatter
 }
 
