@@ -17,6 +17,6 @@ func main() {
 	app.Use(logger.New(loggerConfig))
 	app.Use(limiter.New(config.Limiter))
 	config.Connect()
-	route.Setup(app)
+	route.Init(app)
 	log.Fatal(app.Listen(":8080"))
 }

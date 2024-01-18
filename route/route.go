@@ -6,7 +6,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-func Setup(app *fiber.App) {
+func Init(app *fiber.App) {
 	apiRoute := app.Group("/api")
 
 	publicRoute := apiRoute.Group("/")

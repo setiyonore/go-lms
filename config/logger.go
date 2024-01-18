@@ -20,7 +20,7 @@ func InitLogger() {
 	}
 	LoggerConfig = logger.Config{
 		Output: file,
-		// Format: "${time}|[${ip}]|${method}|${path}|${status}|${latency} ${body}\n",
+		Format: "${time}|[${ip}]|${method}|${path}|${status}|${latency} \n",
 	}
 
 	LogFile = file
