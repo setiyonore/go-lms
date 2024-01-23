@@ -1,4 +1,3 @@
-// log.go
 package config
 
 import (
@@ -20,7 +19,7 @@ func InitLogger() {
 	}
 	LoggerConfig = logger.Config{
 		Output: file,
-		Format: "${time}|[${ip}]|${method}|${path}|${status}|${latency} \n",
+		Format: "${time}|[${ip}]|${method}|${path}|${status}|${latency}|${queryParams}|${error} \n",
 	}
 
 	LogFile = file
