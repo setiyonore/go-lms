@@ -12,6 +12,7 @@ func Init(app *fiber.App) {
 	publicRoute := apiRoute.Group("/")
 	NewAuthRoute(publicRoute)
 	privateRoute := apiRoute.Group("/", middleware.AuthMiddleware())
+	NewBookBorrowingsRoute(privateRoute)
 	NewBoookRoute(privateRoute)
 	NewPublihserRoute(privateRoute)
 	NewAuthorRoute(privateRoute)

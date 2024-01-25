@@ -10,13 +10,13 @@ type BookBorrowings struct {
 	ID            uint           `json:"id"`
 	BorrowingDate string         `json:"borrowing_date"`
 	ReturnDate    string         `json:"return_date"`
-	UserID        int            `json:"user_id"`
+	UserID        int            `json:"-"`
 	IsLateReturn  bool           `json:"is_late_return"`
 	IsReturn      bool           `json:"is_return"`
 	CreatedAt     time.Time      `json:"-"`
 	UpdatedAt     time.Time      `json:"-"`
 	DeletedAt     gorm.DeletedAt `json:"-"`
-	User          User           `gorm:"foreignkey:UserID"`
+	User          user           `gorm:"foreignkey:UserID"`
 }
 
 func FormatBookBorrowing(bookborrowing BookBorrowings) BookBorrowings {
@@ -27,7 +27,6 @@ func FormatBookBorrowing(bookborrowing BookBorrowings) BookBorrowings {
 	bookborrowingFormatter.UserID = bookborrowing.UserID
 	bookborrowingFormatter.IsLateReturn = bookborrowing.IsLateReturn
 	bookborrowingFormatter.IsReturn = bookborrowing.IsReturn
-	bookborrowingFormatter.User.Name = bookborrowing.User.Name
 	return bookborrowing
 }
 
@@ -38,4 +37,15 @@ func FormatBookBorrowings(bookborrowings []BookBorrowings) []BookBorrowings {
 		bookborrowingsformatter = append(bookborrowingsformatter, bookborrowingformatter)
 	}
 	return bookborrowingsformatter
+}
+
+type user struct {
+	ID        int            `json:"-"`
+	Name      string         `json:"name"`
+	Email     string         `json:"-"`
+	Password  string         `json:"-"`
+	Role      int            `json:"-"`
+	CreatedAt time.Time      `json:"-"`
+	UpdatedAt time.Time      `json:"-"`
+	DeletedAt gorm.DeletedAt `json:"-"`
 }

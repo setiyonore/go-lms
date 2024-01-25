@@ -6,7 +6,7 @@ import (
 )
 
 var Database *gorm.DB
-var DATABASE_URI string = "root:root@tcp(localhost:3306)/lms?charset=utf8mb4&parseTime=True&loc=Local"
+var DATABASE_URI string = "root:@tcp(localhost:3306)/lms?charset=utf8mb4&parseTime=True&loc=Local"
 
 func Connect() error {
 	var err error

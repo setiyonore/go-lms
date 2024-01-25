@@ -3,6 +3,7 @@ package config
 import (
 	"log"
 	"os"
+	"time"
 
 	"github.com/gofiber/fiber/v2/middleware/logger"
 )
@@ -19,7 +20,7 @@ func InitLogger() {
 	}
 	LoggerConfig = logger.Config{
 		Output: file,
-		Format: "${time}|[${ip}]|${method}|${path}|${status}|${latency}|${queryParams}|${error} \n",
+		Format: time.Now().Format("2006-01-02") + " ${time}|[${ip}]|${method}|${path}|${status}|${latency}|${error} \n",
 	}
 
 	LogFile = file
