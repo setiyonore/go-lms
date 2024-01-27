@@ -6,7 +6,7 @@ import (
 	"gorm.io/gorm"
 )
 
-type BookBorrowDetails struct {
+type BookBorrowDetailsw struct {
 	ID           uint           `json:"id"`
 	IdBookBorrow uint           `json:"id_book_borrow"`
 	IdBook       uint           `json:"id_book"`

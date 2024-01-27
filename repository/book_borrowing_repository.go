@@ -8,6 +8,7 @@ import (
 
 type BookBorrowing interface {
 	GetAll() ([]entities.BookBorrowings, error)
+	GetDetail(id int) (entities.BookBorrowings, error)
 }
 
 type bookborrowing struct {
@@ -25,4 +26,13 @@ func (r *bookborrowing) GetAll() ([]entities.BookBorrowings, error) {
 		return bookBorrowings, err
 	}
 	return bookBorrowings, nil
+}
+
+func (r *bookborrowing) GetDetail(id int) (entities.BookBorrowings, error) {
+	var bookborrowing entities.BookBorrowings
+	err := r.db.Where("id", id).Preload("User").Preload("BookBorrowingDetail.Book").Find(&bookborrowing).Error
+	if err != nil {
+		return bookborrowing, err
+	}
+	return bookborrowing, nil
 }

@@ -12,6 +12,7 @@ type Book interface {
 	AddBook(input entities.AddBookInput) error
 	UpdateBook(inputId int, inputData entities.AddBookInput) error
 	DeleteBook(id int) error
+	CheckBookAvalable(id int) (bool, error)
 }
 
 type book struct {
@@ -22,16 +23,16 @@ func NewBook(bookRepository repository.Book) *book {
 	return &book{bookRepository: bookRepository}
 }
 
-func (b *book) GetBook() ([]entities.Book, error) {
-	books, err := b.bookRepository.FindAll()
+func (s *book) GetBook() ([]entities.Book, error) {
+	books, err := s.bookRepository.FindAll()
 	if err != nil {
 		return books, err
 	}
 	return books, nil
 }
 
-func (b *book) GetBookById(id int) (entities.Book, error) {
-	book, err := b.bookRepository.FindById(id)
+func (s *book) GetBookById(id int) (entities.Book, error) {
+	book, err := s.bookRepository.FindById(id)
 	if err != nil {
 		return book, err
 	}
@@ -42,7 +43,7 @@ func (b *book) GetBookById(id int) (entities.Book, error) {
 	return book, nil
 }
 
-func (b *book) AddBook(input entities.AddBookInput) error {
+func (s *book) AddBook(input entities.AddBookInput) error {
 	book := entities.Book{}
 	book.Name = input.Name
 	book.Description = input.Description
@@ -52,15 +53,15 @@ func (b *book) AddBook(input entities.AddBookInput) error {
 	book.YearOfPublication = input.YearOfPublication
 	book.ImgUrlThumbnail = input.ImgUrlThumbnail
 	book.ImgUrlCover = input.ImgUrlCover
-	err := b.bookRepository.Save(book)
+	err := s.bookRepository.Save(book)
 	if err != nil {
 		return err
 	}
 	return nil
 }
 
-func (b *book) UpdateBook(inputId int, inputData entities.AddBookInput) error {
-	book, err := b.bookRepository.FindById(inputId)
+func (s *book) UpdateBook(inputId int, inputData entities.AddBookInput) error {
+	book, err := s.bookRepository.FindById(inputId)
 	if err != nil {
 		return err
 	}
@@ -78,24 +79,39 @@ func (b *book) UpdateBook(inputId int, inputData entities.AddBookInput) error {
 	book.YearOfPublication = inputData.YearOfPublication
 	book.ImgUrlThumbnail = inputData.ImgUrlThumbnail
 	book.ImgUrlCover = inputData.ImgUrlCover
-	err = b.bookRepository.Update(book)
+	err = s.bookRepository.Update(book)
 	if err != nil {
 		return err
 	}
 	return nil
 }
 
-func (b *book) DeleteBook(id int) error {
-	book, err := b.bookRepository.FindById(id)
+func (s *book) DeleteBook(id int) error {
+	book, err := s.bookRepository.FindById(id)
 	if err != nil {
 		return err
 	}
 	if book.ID == 0 {
 		return errors.New("data not found")
 	}
-	err = b.bookRepository.Delete(id)
+	err = s.bookRepository.Delete(id)
 	if err != nil {
 		return err
 	}
 	return nil
+}
+
+func (s *book) CheckBookAvalable(id int) (bool, error) {
+	book, err := s.bookRepository.FindById(id)
+	if err != nil {
+		return false, err
+	}
+	if book.ID == 0 {
+		err = errors.New("data not found")
+		return false, err
+	}
+	if book.IsAvailable == 0 {
+		return false, nil
+	}
+	return true, nil
 }

@@ -29,4 +29,7 @@ func NewBoookRoute(app fiber.Router) {
 	app.Delete("/books/:id", func(c *fiber.Ctx) error {
 		return bookHandler.DeleteBook(c)
 	})
+	app.Get("/books/checkBookStatus/:id", func(c *fiber.Ctx) error {
+		return bookHandler.CheckBookAvalable(c)
+	})
 }

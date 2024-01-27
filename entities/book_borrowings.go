@@ -7,16 +7,17 @@ import (
 )
 
 type BookBorrowings struct {
-	ID            uint           `json:"id"`
-	BorrowingDate string         `json:"borrowing_date"`
-	ReturnDate    string         `json:"return_date"`
-	UserID        int            `json:"-"`
-	IsLateReturn  bool           `json:"is_late_return"`
-	IsReturn      bool           `json:"is_return"`
-	CreatedAt     time.Time      `json:"-"`
-	UpdatedAt     time.Time      `json:"-"`
-	DeletedAt     gorm.DeletedAt `json:"-"`
-	User          user           `gorm:"foreignkey:UserID"`
+	ID                  uint                `json:"id"`
+	BorrowingDate       string              `json:"borrowing_date"`
+	ReturnDate          string              `json:"return_date"`
+	UserID              int                 `json:"-"`
+	IsLateReturn        bool                `json:"is_late_return"`
+	IsReturn            bool                `json:"is_return"`
+	CreatedAt           time.Time           `json:"-"`
+	UpdatedAt           time.Time           `json:"-"`
+	DeletedAt           gorm.DeletedAt      `json:"-"`
+	User                user                `gorm:"foreignkey:UserID"`
+	BookBorrowingDetail []BookBorrowDetails `gorm:"foreignkey:IdBookBorrow"`
 }
 
 func FormatBookBorrowing(bookborrowing BookBorrowings) BookBorrowings {
@@ -48,4 +49,29 @@ type user struct {
 	CreatedAt time.Time      `json:"-"`
 	UpdatedAt time.Time      `json:"-"`
 	DeletedAt gorm.DeletedAt `json:"-"`
+}
+
+type BookBorrowDetails struct {
+	ID           uint           `json:"id"`
+	IdBookBorrow uint           `json:"-"`
+	IdBook       uint           `json:"id_book"`
+	CreatedAt    time.Time      `json:"-"`
+	UpdatedAt    time.Time      `json:"-"`
+	DeletedAt    gorm.DeletedAt `json:"-"`
+	Book         book           `gorm:"foreignkey:IdBook"`
+}
+
+type book struct {
+	ID                uint           `json:"id_book"`
+	Name              string         `json:"name"`
+	Description       string         `json:"-"`
+	PublisherID       uint           `json:"-"`
+	AuthorID          uint           `json:"-"`
+	Isbn              string         `json:"isbn"`
+	YearOfPublication string         `json:"-"`
+	ImgUrlThumbnail   string         `json:"-"`
+	ImgUrlCover       string         `json:"-"`
+	CreatedAt         time.Time      `json:"-"`
+	UpdatedAt         time.Time      `json:"-"`
+	DeletedAt         gorm.DeletedAt `json:"-" gorm:"index"`
 }
