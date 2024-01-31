@@ -20,4 +20,10 @@ func NewLibraryMemberRoute(app fiber.Router) {
 	app.Get("library_members/:id", func(c *fiber.Ctx) error {
 		return libraryMemberHandler.GetLibraryMemberById(c)
 	})
+	app.Post("library_members/searchByName", func(c *fiber.Ctx) error {
+		return libraryMemberHandler.GetLibraryMemberByName(c)
+	})
+	app.Post("library_members", func(c *fiber.Ctx) error {
+		return libraryMemberHandler.AddLibrarryMember(c)
+	})
 }

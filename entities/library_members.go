@@ -14,6 +14,13 @@ type LibrarryMembers struct {
 	UpdatedAt   time.Time      `json:"-"`
 	DeletedAt   gorm.DeletedAt `json:"-"`
 }
+type AddLibraryMemberInput struct {
+	Name        string `json:"name" validate:"required,min=3"`
+	PhoneNumber string `json:"phone_number" validate:"required,min=3"`
+}
+type LibrarryMemberSearchByName struct {
+	Name string `json:"name" validate:"required,min=3"`
+}
 
 func FormatLibraryMember(libraryMember LibrarryMembers) LibrarryMembers {
 	libraryMemberFormatter := LibrarryMembers{}

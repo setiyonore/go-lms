@@ -9,6 +9,8 @@ import (
 type LibraryMember interface {
 	FindAll() ([]entities.LibrarryMembers, error)
 	FindById(id int) (entities.LibrarryMembers, error)
+	FindByName(name string) (entities.LibrarryMembers, error)
+	Save(librarryMember entities.LibrarryMembers) error
 }
 
 type librarymember struct {
@@ -34,4 +36,21 @@ func (r *librarymember) FindById(id int) (entities.LibrarryMembers, error) {
 		return libraryMember, err
 	}
 	return libraryMember, nil
+}
+
+func (r *librarymember) FindByName(name string) (entities.LibrarryMembers, error) {
+	var libraryMember entities.LibrarryMembers
+	err := r.db.Where("name LIKE ?", "%"+name+"%").Find(&libraryMember).Error
+	if err != nil {
+		return libraryMember, err
+	}
+	return libraryMember, nil
+}
+
+func (r *librarymember) Save(librarryMember entities.LibrarryMembers) error {
+	err := r.db.Save(&librarryMember).Error
+	if err != nil {
+		return err
+	}
+	return nil
 }

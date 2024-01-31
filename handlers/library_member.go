@@ -6,6 +6,7 @@ import (
 	"go-lms/service"
 	"strconv"
 
+	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"
 )
 
@@ -38,7 +39,56 @@ func (h *LibraryMemberHandler) GetLibraryMemberById(c *fiber.Ctx) error {
 			fiber.StatusInternalServerError, "error", nil)
 		return c.Status(fiber.StatusInternalServerError).JSON(response)
 	}
-	response := helper.APIResponse("success", fiber.StatusOK, "library member",
+	response := helper.APIResponse("success", fiber.StatusOK, "librarry member",
 		entities.FormatLibraryMember(libraryMember))
+	return c.Status(fiber.StatusOK).JSON(response)
+}
+
+func (h *LibraryMemberHandler) GetLibraryMemberByName(c *fiber.Ctx) error {
+	var input entities.LibrarryMemberSearchByName
+	data := entities.LibrarryMembers{}
+	err := c.BodyParser(&input)
+	if err != nil {
+		response := helper.APIResponse("failed to parse data", fiber.StatusBadRequest,
+			"error", nil)
+		return c.Status(fiber.StatusBadRequest).JSON(response)
+	}
+	validate := validator.New()
+	err = validate.Struct(&input)
+	if err != nil {
+		response := helper.APIResponse(helper.FormatterError(err.(validator.ValidationErrors)), fiber.StatusBadRequest, "error", nil)
+		return c.Status(fiber.StatusBadRequest).JSON(response)
+	}
+	data, err = h.libraryMemberService.GetLibraryMemberByName(input.Name)
+	if err != nil {
+		response := helper.APIResponse("failed to find library member",
+			fiber.StatusInternalServerError, "error", nil)
+		return c.Status(fiber.StatusInternalServerError).JSON(response)
+	}
+	response := helper.APIResponse("librarry member", fiber.StatusOK, "success",
+		entities.FormatLibraryMember(data))
+	return c.Status(fiber.StatusOK).JSON(response)
+}
+
+func (h *LibraryMemberHandler) AddLibrarryMember(c *fiber.Ctx) error {
+	var input entities.AddLibraryMemberInput
+	err := c.BodyParser(&input)
+	if err != nil {
+		response := helper.APIResponse("failed parse data", fiber.StatusInternalServerError,
+			"error", nil)
+		return c.Status(fiber.StatusInternalServerError).JSON(response)
+	}
+	validate := validator.New()
+	err = validate.Struct(&input)
+	if err != nil {
+		response := helper.APIResponse(helper.FormatterError(err.(validator.ValidationErrors)), fiber.StatusBadRequest, "error", nil)
+		return c.Status(fiber.StatusBadRequest).JSON(response)
+	}
+	err = h.libraryMemberService.AddLibrarryMember(input)
+	if err != nil {
+		response := helper.APIResponse("failed to save librarry member", fiber.StatusInternalServerError, "error", nil)
+		return c.Status(fiber.StatusInternalServerError).JSON(response)
+	}
+	response := helper.APIResponse("success save librarry member", fiber.StatusOK, "success", nil)
 	return c.Status(fiber.StatusOK).JSON(response)
 }
