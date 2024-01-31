@@ -92,3 +92,42 @@ func (h *LibraryMemberHandler) AddLibrarryMember(c *fiber.Ctx) error {
 	response := helper.APIResponse("success save librarry member", fiber.StatusOK, "success", nil)
 	return c.Status(fiber.StatusOK).JSON(response)
 }
+
+func (h *LibraryMemberHandler) UpdateLibrarryMember(c *fiber.Ctx) error {
+	id, _ := strconv.Atoi(c.Params("id"))
+	input := entities.AddLibraryMemberInput{}
+	err := c.BodyParser(&input)
+	if err != nil {
+		response := helper.APIResponse("failed parse data", fiber.StatusBadRequest,
+			"error", nil)
+		return c.Status(fiber.StatusBadRequest).JSON(response)
+	}
+	validate := validator.New()
+	err = validate.Struct(&input)
+	if err != nil {
+		response := helper.APIResponse(helper.FormatterError(err.(validator.ValidationErrors)),
+			fiber.StatusBadRequest, "error", nil)
+		return c.Status(fiber.StatusBadRequest).JSON(response)
+	}
+	err = h.libraryMemberService.UpdateLibrarryMember(id, input)
+	if err != nil {
+		response := helper.APIResponse("failed update library member",
+			fiber.StatusInternalServerError, "error", nil)
+		return c.Status(fiber.StatusInternalServerError).JSON(response)
+	}
+	response := helper.APIResponse("success update library member", fiber.StatusOK,
+		"success", nil)
+	return c.Status(fiber.StatusOK).JSON(response)
+}
+
+func (h *LibraryMemberHandler) DeleteLibrarryMember(c *fiber.Ctx) error {
+	id, _ := strconv.Atoi(c.Params("id"))
+	err := h.libraryMemberService.DeleteLibrarryMember(id)
+	if err != nil {
+		response := helper.APIResponse("failed delete librarry member",
+			fiber.StatusInternalServerError, "error", nil)
+		return c.Status(fiber.StatusInternalServerError).JSON(response)
+	}
+	response := helper.APIResponse("success delete data", fiber.StatusOK, "error", nil)
+	return c.Status(fiber.StatusOK).JSON(response)
+}

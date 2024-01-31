@@ -11,6 +11,8 @@ type LibraryMember interface {
 	FindById(id int) (entities.LibrarryMembers, error)
 	FindByName(name string) (entities.LibrarryMembers, error)
 	Save(librarryMember entities.LibrarryMembers) error
+	Update(librarymember entities.LibrarryMembers) error
+	Delete(id int) error
 }
 
 type librarymember struct {
@@ -49,6 +51,27 @@ func (r *librarymember) FindByName(name string) (entities.LibrarryMembers, error
 
 func (r *librarymember) Save(librarryMember entities.LibrarryMembers) error {
 	err := r.db.Save(&librarryMember).Error
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (r *librarymember) Update(libraryMember entities.LibrarryMembers) error {
+	err := r.db.Save(&libraryMember).Error
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (r *librarymember) Delete(id int) error {
+	var libraryMember entities.LibrarryMembers
+	err := r.db.Where("id", id).First(&libraryMember).Error
+	if err != nil {
+		return err
+	}
+	err = r.db.Delete(&libraryMember).Error
 	if err != nil {
 		return err
 	}

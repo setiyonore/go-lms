@@ -11,6 +11,8 @@ type LibraryMember interface {
 	GetLibraryMemberById(id int) (entities.LibrarryMembers, error)
 	GetLibraryMemberByName(name string) (entities.LibrarryMembers, error)
 	AddLibrarryMember(input entities.AddLibraryMemberInput) error
+	UpdateLibrarryMember(id int, input entities.AddLibraryMemberInput) error
+	DeleteLibrarryMember(id int) error
 }
 
 type librarymember struct {
@@ -57,6 +59,40 @@ func (s *librarymember) AddLibrarryMember(input entities.AddLibraryMemberInput) 
 	librarryMember.Name = input.Name
 	librarryMember.PhoneNumber = input.PhoneNumber
 	err := s.libraryMemberRepository.Save(librarryMember)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (s *librarymember) UpdateLibrarryMember(id int, input entities.AddLibraryMemberInput) error {
+	librarryMember := entities.LibrarryMembers{}
+
+	librarryMember, err := s.libraryMemberRepository.FindById(id)
+	if err != nil {
+		return err
+	}
+	if librarryMember.Id == 0 {
+		return errors.New("data not found")
+	}
+	librarryMember.Name = input.Name
+	librarryMember.PhoneNumber = input.PhoneNumber
+	err = s.libraryMemberRepository.Update(librarryMember)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (s *librarymember) DeleteLibrarryMember(id int) error {
+	librarryMember, err := s.libraryMemberRepository.FindById(id)
+	if err != nil {
+		return err
+	}
+	if librarryMember.Id == 0 {
+		return errors.New("data not found")
+	}
+	err = s.libraryMemberRepository.Delete(id)
 	if err != nil {
 		return err
 	}

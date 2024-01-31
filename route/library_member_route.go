@@ -26,4 +26,7 @@ func NewLibraryMemberRoute(app fiber.Router) {
 	app.Post("library_members", func(c *fiber.Ctx) error {
 		return libraryMemberHandler.AddLibrarryMember(c)
 	})
+	app.Put("library_members/:id", func(c *fiber.Ctx) error {
+		return libraryMemberHandler.UpdateLibrarryMember(c)
+	})
 }
