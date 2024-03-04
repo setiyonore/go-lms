@@ -21,7 +21,13 @@ func NewBookBorrowing(db *gorm.DB) *bookborrowing {
 
 func (r *bookborrowing) GetAll() ([]entities.BookBorrowings, error) {
 	var bookBorrowings []entities.BookBorrowings
-	err := r.db.Preload("User").Find(&bookBorrowings).Error
+	err := r.db.
+		Select("id", "borrowing_date", "return_date", "is_late_return", "is_return",
+			"user_id").
+		Preload("User", func(db *gorm.DB) *gorm.DB {
+			return db.Select("id", "name")
+		}).
+		Find(&bookBorrowings).Error
 	if err != nil {
 		return bookBorrowings, err
 	}
@@ -30,7 +36,16 @@ func (r *bookborrowing) GetAll() ([]entities.BookBorrowings, error) {
 
 func (r *bookborrowing) GetDetail(id int) (entities.BookBorrowings, error) {
 	var bookborrowing entities.BookBorrowings
-	err := r.db.Where("id", id).Preload("User").Preload("BookBorrowingDetail.Book").Find(&bookborrowing).Error
+	err := r.db.Where("id", id).
+		Select("id", "borrowing_date", "return_date", "is_late_return", "is_return",
+			"user_id").
+		Preload("User", func(db *gorm.DB) *gorm.DB {
+			return db.Select("id", "name")
+		}).
+		Preload("BookBorrowingDetail.Book", func(db *gorm.DB) *gorm.DB {
+			return db.Select("id", "name", "isbn")
+		}).
+		Find(&bookborrowing).Error
 	if err != nil {
 		return bookborrowing, err
 	}

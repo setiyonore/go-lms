@@ -24,7 +24,9 @@ func NewLibraryMember(db *gorm.DB) *librarymember {
 }
 func (r *librarymember) FindAll() ([]entities.LibrarryMembers, error) {
 	var libraryMembers []entities.LibrarryMembers
-	err := r.db.Find(&libraryMembers).Error
+	err := r.db.
+		Select("id", "name", "phone_number").
+		Find(&libraryMembers).Error
 	if err != nil {
 		return libraryMembers, err
 	}
@@ -33,7 +35,9 @@ func (r *librarymember) FindAll() ([]entities.LibrarryMembers, error) {
 
 func (r *librarymember) FindById(id int) (entities.LibrarryMembers, error) {
 	var libraryMember entities.LibrarryMembers
-	err := r.db.Where("id", id).Find(&libraryMember).Error
+	err := r.db.Where("id", id).
+		Select("id", "name", "phone_number").
+		Find(&libraryMember).Error
 	if err != nil {
 		return libraryMember, err
 	}
@@ -42,7 +46,9 @@ func (r *librarymember) FindById(id int) (entities.LibrarryMembers, error) {
 
 func (r *librarymember) FindByName(name string) (entities.LibrarryMembers, error) {
 	var libraryMember entities.LibrarryMembers
-	err := r.db.Where("name LIKE ?", "%"+name+"%").Find(&libraryMember).Error
+	err := r.db.Where("name LIKE ?", "%"+name+"%").
+		Select("id", "name", "phone_number").
+		Find(&libraryMember).Error
 	if err != nil {
 		return libraryMember, err
 	}

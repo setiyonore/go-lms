@@ -3,6 +3,7 @@ package config
 import (
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
+	"gorm.io/gorm/logger"
 )
 
 var Database *gorm.DB
@@ -12,8 +13,9 @@ func Connect() error {
 	var err error
 
 	Database, err = gorm.Open(mysql.Open(DATABASE_URI), &gorm.Config{
-		SkipDefaultTransaction: true,
-		PrepareStmt:            true,
+		// SkipDefaultTransaction: true,
+		PrepareStmt: true,
+		Logger:      logger.Default.LogMode(logger.Info),
 	})
 
 	if err != nil {

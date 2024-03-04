@@ -2,6 +2,7 @@ package repository
 
 import (
 	"go-lms/entities"
+
 	"gorm.io/gorm"
 )
 
@@ -24,7 +25,9 @@ func NewUserRepository(db *gorm.DB) *user {
 
 func (u *user) FindAll() ([]entities.User, error) {
 	var users []entities.User
-	err := u.db.Find(&users).Error
+	err := u.db.
+		Select("id", "name", "email", "role").
+		Find(&users).Error
 	if err != nil {
 		return users, err
 	}
@@ -32,7 +35,9 @@ func (u *user) FindAll() ([]entities.User, error) {
 }
 func (u *user) FindById(Id int) (entities.User, error) {
 	var user entities.User
-	err := u.db.Where("id", Id).Find(&user).Error
+	err := u.db.Where("id", Id).
+		Select("id", "name", "email", "role").
+		Find(&user).Error
 	if err != nil {
 		return user, err
 	}

@@ -41,37 +41,19 @@ func FormatBookBorrowings(bookborrowings []BookBorrowings) []BookBorrowings {
 }
 
 type user struct {
-	ID        int            `json:"-"`
-	Name      string         `json:"name"`
-	Email     string         `json:"-"`
-	Password  string         `json:"-"`
-	Role      int            `json:"-"`
-	CreatedAt time.Time      `json:"-"`
-	UpdatedAt time.Time      `json:"-"`
-	DeletedAt gorm.DeletedAt `json:"-"`
+	ID   int    `json:"-"`
+	Name string `json:"name"`
 }
 
 type BookBorrowDetails struct {
-	ID           uint           `json:"id"`
-	IdBookBorrow uint           `json:"-"`
-	IdBook       uint           `json:"id_book"`
-	CreatedAt    time.Time      `json:"-"`
-	UpdatedAt    time.Time      `json:"-"`
-	DeletedAt    gorm.DeletedAt `json:"-"`
-	Book         book           `gorm:"foreignkey:IdBook"`
+	ID           uint `json:"id"`
+	IdBookBorrow uint `json:"-"`
+	IdBook       uint `json:"-"`
+	Book         book `gorm:"foreignkey:IdBook"`
 }
 
 type book struct {
-	ID                uint           `json:"id_book"`
-	Name              string         `json:"name"`
-	Description       string         `json:"-"`
-	PublisherID       uint           `json:"-"`
-	AuthorID          uint           `json:"-"`
-	Isbn              string         `json:"isbn"`
-	YearOfPublication string         `json:"-"`
-	ImgUrlThumbnail   string         `json:"-"`
-	ImgUrlCover       string         `json:"-"`
-	CreatedAt         time.Time      `json:"-"`
-	UpdatedAt         time.Time      `json:"-"`
-	DeletedAt         gorm.DeletedAt `json:"-" gorm:"index"`
+	ID   uint   `json:"-"`
+	Name string `json:"name"`
+	Isbn string `json:"isbn"`
 }

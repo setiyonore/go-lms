@@ -24,7 +24,16 @@ func NewBook(db *gorm.DB) *book {
 
 func (r *book) FindAll() ([]entities.Book, error) {
 	var books []entities.Book
-	err := r.db.Preload("Publisher").Preload("Author").Find(&books).Error
+	err := r.db.
+		Select("id", "name", "description", "publisher_id", "author_id", "isbn",
+			"year_of_publication", "img_url_thumbnail", "img_url_cover", "is_available").
+		Preload("Publisher", func(db *gorm.DB) *gorm.DB {
+			return db.Select("id", "name")
+		}).
+		Preload("Author", func(db *gorm.DB) *gorm.DB {
+			return db.Select("id", "name")
+		}).
+		Find(&books).Error
 	if err != nil {
 		return books, err
 	}
@@ -33,7 +42,16 @@ func (r *book) FindAll() ([]entities.Book, error) {
 
 func (r *book) FindById(id int) (entities.Book, error) {
 	var book entities.Book
-	err := r.db.Where("id", id).Preload("Publisher").Preload("Author").Find(&book).Error
+	err := r.db.Where("id", id).
+		Select("id", "name", "description", "publisher_id", "author_id", "isbn",
+			"year_of_publication", "img_url_thumbnail", "img_url_cover", "is_available").
+		Preload("Publisher", func(db *gorm.DB) *gorm.DB {
+			return db.Select("id", "name")
+		}).
+		Preload("Author", func(db *gorm.DB) *gorm.DB {
+			return db.Select("id", "name")
+		}).
+		Find(&book).Error
 	if err != nil {
 		return book, err
 	}

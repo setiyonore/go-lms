@@ -24,7 +24,9 @@ func NewPublisherRepository(db *gorm.DB) *publisher {
 
 func (p *publisher) FindAll() ([]entities.Publisher, error) {
 	var publishers []entities.Publisher
-	err := p.db.Find(&publishers).Error
+	err := p.db.
+		Select("id", "name").
+		Find(&publishers).Error
 	if err != nil {
 		return publishers, err
 	}
@@ -33,8 +35,9 @@ func (p *publisher) FindAll() ([]entities.Publisher, error) {
 
 func (p *publisher) FindById(id int) (entities.Publisher, error) {
 	var publisher entities.Publisher
-
-	err := p.db.Where("id=?", id).Find(&publisher).Error
+	err := p.db.Where("id=?", id).
+		Select("id", "name").
+		Find(&publisher).Error
 	if err != nil {
 		return publisher, err
 	}

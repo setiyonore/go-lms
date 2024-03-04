@@ -2,6 +2,7 @@ package repository
 
 import (
 	"go-lms/entities"
+
 	"gorm.io/gorm"
 )
 
@@ -18,7 +19,9 @@ type author struct {
 
 func (a *author) FindByID(ID int) (entities.Author, error) {
 	var author entities.Author
-	err := a.db.Where("id = ?", ID).Find(&author).Error
+	err := a.db.Where("id = ?", ID).
+		Select("id", "name").
+		Find(&author).Error
 	if err != nil {
 		return author, err
 	}
@@ -31,7 +34,9 @@ func NewAuthor(db *gorm.DB) *author {
 
 func (a *author) FindAll() ([]entities.Author, error) {
 	var authors []entities.Author
-	err := a.db.Find(&authors).Error
+	err := a.db.
+		Select("id", "name").
+		Find(&authors).Error
 	if err != nil {
 		return authors, err
 	}
