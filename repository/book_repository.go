@@ -67,7 +67,7 @@ func (r *book) Save(book entities.Book) error {
 }
 
 func (r *book) Update(book entities.Book) error {
-	err := r.db.Save(&book).Error
+	err := r.db.Updates(&book).Error
 	if err != nil {
 		return err
 	}

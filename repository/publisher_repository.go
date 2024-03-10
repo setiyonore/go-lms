@@ -53,7 +53,7 @@ func (p *publisher) Save(publisher entities.Publisher) error {
 }
 
 func (p *publisher) Update(publisher entities.Publisher) error {
-	err := p.db.Save(&publisher).Error
+	err := p.db.Updates(&publisher).Error
 	if err != nil {
 		return err
 	}

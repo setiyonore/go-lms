@@ -7,11 +7,11 @@ import (
 )
 
 type User struct {
-	ID        int            `json:"id"`
-	Name      string         `json:"name"`
-	Email     string         `json:"email"`
-	Password  string         `json:"-"`
-	Role      int            `json:"role"`
+	ID       int    `json:"id"`
+	Name     string `json:"name"`
+	Email    string `json:"email"`
+	Password string `json:"-"`
+	// Role      int            `json:"role"`
 	CreatedAt time.Time      `json:"-"`
 	UpdatedAt time.Time      `json:"-"`
 	DeletedAt gorm.DeletedAt `json:"-"`
@@ -32,7 +32,7 @@ func FormatUser(user User) User {
 	userFormatter.ID = user.ID
 	userFormatter.Name = user.Name
 	userFormatter.Email = user.Email
-	userFormatter.Role = user.Role
+	// userFormatter.Role = user.Role
 	return userFormatter
 }
 

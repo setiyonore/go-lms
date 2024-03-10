@@ -64,7 +64,7 @@ func (r *librarymember) Save(librarryMember entities.LibrarryMembers) error {
 }
 
 func (r *librarymember) Update(libraryMember entities.LibrarryMembers) error {
-	err := r.db.Save(&libraryMember).Error
+	err := r.db.Updates(&libraryMember).Error
 	if err != nil {
 		return err
 	}

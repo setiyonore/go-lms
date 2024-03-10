@@ -26,7 +26,7 @@ func NewUserRepository(db *gorm.DB) *user {
 func (u *user) FindAll() ([]entities.User, error) {
 	var users []entities.User
 	err := u.db.
-		Select("id", "name", "email", "role").
+		Select("id", "name", "email").
 		Find(&users).Error
 	if err != nil {
 		return users, err
@@ -36,7 +36,7 @@ func (u *user) FindAll() ([]entities.User, error) {
 func (u *user) FindById(Id int) (entities.User, error) {
 	var user entities.User
 	err := u.db.Where("id", Id).
-		Select("id", "name", "email", "role").
+		Select("id", "name", "email").
 		Find(&user).Error
 	if err != nil {
 		return user, err
@@ -60,7 +60,7 @@ func (u *user) Save(User entities.User) error {
 	return nil
 }
 func (u *user) Update(User entities.User) error {
-	err := u.db.Save(&User).Error
+	err := u.db.Updates(&User).Error
 	if err != nil {
 		return err
 	}

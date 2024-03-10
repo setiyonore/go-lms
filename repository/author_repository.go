@@ -52,7 +52,7 @@ func (a *author) Save(author entities.Author) error {
 }
 
 func (a *author) Update(author entities.Author) error {
-	err := a.db.Save(&author).Error
+	err := a.db.Updates(&author).Error
 	if err != nil {
 		return err
 	}
