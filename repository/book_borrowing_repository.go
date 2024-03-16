@@ -9,6 +9,8 @@ import (
 type BookBorrowing interface {
 	GetAll() ([]entities.BookBorrowings, error)
 	GetDetail(id int) (entities.BookBorrowings, error)
+	SaveBorrowing(entities.BookBorrowings) (entities.BookBorrowings, error)
+	SaveBorrowingDetails(idBorrowing int, dataDetails []entities.BookBorrowDetails) error
 }
 
 type bookborrowing struct {
@@ -50,4 +52,24 @@ func (r *bookborrowing) GetDetail(id int) (entities.BookBorrowings, error) {
 		return bookborrowing, err
 	}
 	return bookborrowing, nil
+}
+
+func (r *bookborrowing) SaveBorrowing(bookborrowing entities.BookBorrowings) (entities.BookBorrowings, error) {
+	err := r.db.Create(&bookborrowing).Error
+	if err != nil {
+		return bookborrowing, err
+	}
+	return bookborrowing, nil
+}
+
+func (r *bookborrowing) SaveBorrowingDetails(idBorrowing int, dataDetails []entities.BookBorrowDetails) error {
+	for _, detail := range dataDetails {
+		detail.IdBookBorrow = uint(idBorrowing)
+
+		err := r.db.Create(&detail).Error
+		if err != nil {
+			return err
+		}
+	}
+	return nil
 }

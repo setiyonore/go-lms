@@ -8,6 +8,7 @@ import (
 type BookBorrowings interface {
 	GetBookBorrowing() ([]entities.BookBorrowings, error)
 	GetDetailBorrowing(id int) (entities.BookBorrowings, error)
+	AddBookBorrowing(entities.BookBorrowings, []entities.BookBorrowDetails) error
 }
 
 type bookborrowings struct {
@@ -32,4 +33,8 @@ func (s *bookborrowings) GetDetailBorrowing(id int) (entities.BookBorrowings, er
 		return bookborrowing, err
 	}
 	return bookborrowing, nil
+}
+
+func (s *bookborrowings) AddBookBorrowing(entities.BookBorrowings, []entities.BookBorrowDetails) error {
+	return nil
 }
