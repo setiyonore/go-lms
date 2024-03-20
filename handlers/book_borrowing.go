@@ -6,6 +6,7 @@ import (
 	"go-lms/service"
 	"strconv"
 
+	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"
 )
 
@@ -41,4 +42,40 @@ func (h *BookBorrowingsHandler) GetDetailBorrowing(c *fiber.Ctx) error {
 		entities.FormatBookBorrowing(bookBorrowingDetail))
 	return c.Status(fiber.StatusOK).JSON(response)
 
+}
+
+func (h *BookBorrowingsHandler) Add(c *fiber.Ctx) error {
+	var input entities.BookBorrowingInput
+	err := c.BodyParser(&input)
+	// input := entities.BookBorrowingInput{
+	// 	BorrowingDate: "2024-03-19",
+	// 	ReturnDate:    "2024-03-26",
+	// 	UserID:        1,
+	// 	Books: []entities.BookItem{
+	// 		{IDBook: 1},
+	// 		{IDBook: 2},
+	// 	},
+	// }
+	// // fmt.Println("handler", input)
+	if err != nil {
+		response := helper.APIResponse("failed parse data", fiber.StatusBadRequest, "error", nil)
+		return c.Status(fiber.StatusBadRequest).JSON(response)
+	}
+	validate := validator.New()
+	err = validate.Struct(&input)
+	if err != nil {
+		response := helper.APIResponse(helper.FormatterError(err.(validator.ValidationErrors)),
+			fiber.StatusBadRequest, "error", nil)
+		return c.Status(fiber.StatusBadRequest).JSON(response)
+	}
+	err = h.bookBorrowingService.AddBookBorrowing(input)
+	if err != nil {
+		response := helper.APIResponse("failed to save book borrowing",
+			fiber.StatusInternalServerError,
+			"error", nil)
+		return c.Status(fiber.StatusInternalServerError).JSON(response)
+	}
+	response := helper.APIResponse("success save book borrowing",
+		fiber.StatusOK, "success", nil)
+	return c.Status(fiber.StatusOK).JSON(response)
 }

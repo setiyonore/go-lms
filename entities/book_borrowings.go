@@ -19,6 +19,15 @@ type BookBorrowings struct {
 	User                user                `gorm:"foreignkey:UserID"`
 	BookBorrowingDetail []BookBorrowDetails `gorm:"foreignkey:IdBookBorrow"`
 }
+type BookBorrowingInput struct {
+	BorrowingDate string     `json:"borrowing_date" validate:"required"`
+	ReturnDate    string     `json:"return_date" validate:"required"`
+	UserID        int        `json:"user_id" vaidate:"required"`
+	Books         []BookItem `json:"books" validate:"required"`
+}
+type BookItem struct {
+	IDBook int `json:"id_book" vaidate:"required"`
+}
 
 func FormatBookBorrowing(bookborrowing BookBorrowings) BookBorrowings {
 	bookborrowingFormatter := BookBorrowings{}

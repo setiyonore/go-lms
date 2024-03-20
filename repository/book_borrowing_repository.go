@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"fmt"
 	"go-lms/entities"
 
 	"gorm.io/gorm"
@@ -65,7 +66,7 @@ func (r *bookborrowing) SaveBorrowing(bookborrowing entities.BookBorrowings) (en
 func (r *bookborrowing) SaveBorrowingDetails(idBorrowing int, dataDetails []entities.BookBorrowDetails) error {
 	for _, detail := range dataDetails {
 		detail.IdBookBorrow = uint(idBorrowing)
-
+		fmt.Println("from repository", detail)
 		err := r.db.Create(&detail).Error
 		if err != nil {
 			return err

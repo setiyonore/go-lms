@@ -1,6 +1,7 @@
 package service
 
 import (
+	"fmt"
 	"go-lms/entities"
 	"go-lms/repository"
 )
@@ -8,7 +9,7 @@ import (
 type BookBorrowings interface {
 	GetBookBorrowing() ([]entities.BookBorrowings, error)
 	GetDetailBorrowing(id int) (entities.BookBorrowings, error)
-	AddBookBorrowing(entities.BookBorrowings, []entities.BookBorrowDetails) error
+	AddBookBorrowing(input entities.BookBorrowingInput) error
 }
 
 type bookborrowings struct {
@@ -35,6 +36,24 @@ func (s *bookborrowings) GetDetailBorrowing(id int) (entities.BookBorrowings, er
 	return bookborrowing, nil
 }
 
-func (s *bookborrowings) AddBookBorrowing(entities.BookBorrowings, []entities.BookBorrowDetails) error {
+func (s *bookborrowings) AddBookBorrowing(input entities.BookBorrowingInput) error {
+	BookBorowwing := entities.BookBorrowings{}
+	BookBorowwing.BorrowingDate = input.BorrowingDate
+	BookBorowwing.ReturnDate = input.ReturnDate
+	BookBorowwing.UserID = input.UserID
+	result, err := s.bookBorrowingsRepository.SaveBorrowing(BookBorowwing)
+	if err != nil {
+		return err
+	}
+	fmt.Println(input)
+	details := make([]entities.BookBorrowDetails, len(input.Books))
+	for i, book := range input.Books {
+		details[i].IdBook = uint(book.IDBook) // Potential issue here
+	}
+	// fmt.Println("form service", details)
+	err = s.bookBorrowingsRepository.SaveBorrowingDetails(int(result.ID), details)
+	if err != nil {
+		return err
+	}
 	return nil
 }

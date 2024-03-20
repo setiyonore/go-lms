@@ -20,4 +20,7 @@ func NewBookBorrowingsRoute(app fiber.Router) {
 	app.Get("/book_borrowings/:id", func(c *fiber.Ctx) error {
 		return bookBorrowingHandler.GetDetailBorrowing(c)
 	})
+	app.Post("/book_borrowings", func(c *fiber.Ctx) error {
+		return bookBorrowingHandler.Add(c)
+	})
 }
