@@ -38,16 +38,21 @@ func (r *bookborrowing) GetAll() ([]entities.BookBorrowings, error) {
 
 func (r *bookborrowing) GetDetail(id int) (entities.BookBorrowings, error) {
 	var bookborrowing entities.BookBorrowings
+
 	err := r.db.Where("id", id).
-		Select("id", "borrowing_date", "return_date", "is_late_return", "is_return",
-			"user_id").
+		Select("id", "borrowing_date", "return_date", "is_late_return",
+			"is_return", "user_id", "member_id").
 		Preload("User", func(db *gorm.DB) *gorm.DB {
+			return db.Select("id", "name")
+		}).
+		Preload("LibrarryMember", func(db *gorm.DB) *gorm.DB {
 			return db.Select("id", "name")
 		}).
 		Preload("BookBorrowingDetail.Book", func(db *gorm.DB) *gorm.DB {
 			return db.Select("id", "name", "isbn")
 		}).
 		Find(&bookborrowing).Error
+
 	if err != nil {
 		return bookborrowing, err
 	}

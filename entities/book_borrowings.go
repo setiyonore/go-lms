@@ -11,18 +11,21 @@ type BookBorrowings struct {
 	BorrowingDate       string              `json:"borrowing_date"`
 	ReturnDate          string              `json:"return_date"`
 	UserID              int                 `json:"-"`
+	MemberID            int                 `json:"-"`
 	IsLateReturn        bool                `json:"is_late_return"`
 	IsReturn            bool                `json:"is_return"`
 	CreatedAt           time.Time           `json:"-"`
 	UpdatedAt           time.Time           `json:"-"`
 	DeletedAt           gorm.DeletedAt      `json:"-"`
 	User                user                `gorm:"foreignkey:UserID"`
+	LibrarryMember      librarryMember      `gorm:"foreignKey:MemberID"`
 	BookBorrowingDetail []BookBorrowDetails `gorm:"foreignkey:IdBookBorrow"`
 }
 type BookBorrowingInput struct {
 	BorrowingDate string     `json:"borrowing_date" validate:"required"`
 	ReturnDate    string     `json:"return_date" validate:"required"`
-	UserID        int        `json:"user_id" vaidate:"required"`
+	UserID        int        `json:"user_id" validate:"required"`
+	MemberID      int        `json:"member_id" validate:"required"`
 	Books         []BookItem `json:"books" validate:"required"`
 }
 
@@ -36,6 +39,7 @@ func FormatBookBorrowing(bookborrowing BookBorrowings) BookBorrowings {
 	bookborrowingFormatter.BorrowingDate = bookborrowing.BorrowingDate
 	bookborrowingFormatter.ReturnDate = bookborrowing.ReturnDate
 	bookborrowingFormatter.UserID = bookborrowing.UserID
+	bookborrowingFormatter.MemberID = bookborrowing.MemberID
 	bookborrowingFormatter.IsLateReturn = bookborrowing.IsLateReturn
 	bookborrowingFormatter.IsReturn = bookborrowing.IsReturn
 	return bookborrowing
@@ -55,6 +59,10 @@ type user struct {
 	Name string `json:"name"`
 }
 
+type librarryMember struct {
+	ID   int    `json:"-"`
+	Name string `json:"name"`
+}
 type BookBorrowDetails struct {
 	ID           uint `json:"id"`
 	IdBookBorrow uint `json:"-"`

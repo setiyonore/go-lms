@@ -40,6 +40,7 @@ func (s *bookborrowings) AddBookBorrowing(input entities.BookBorrowingInput) err
 	BookBorowwing.BorrowingDate = input.BorrowingDate
 	BookBorowwing.ReturnDate = input.ReturnDate
 	BookBorowwing.UserID = input.UserID
+	BookBorowwing.MemberID = input.MemberID
 	result, err := s.bookBorrowingsRepository.SaveBorrowing(BookBorowwing)
 	if err != nil {
 		return err
