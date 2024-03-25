@@ -98,12 +98,11 @@ func (h *BookHandler) DeleteBook(c *fiber.Ctx) error {
 func (h *BookHandler) CheckBookAvalable(c *fiber.Ctx) error {
 	id, _ := strconv.Atoi(c.Params("id"))
 
-	available, err := h.bookService.CheckBookAvalable(id)
-	if err != nil {
-		response := helper.APIResponse("failed to get book status",
-			fiber.StatusInternalServerError, "error", nil)
-		return c.Status(fiber.StatusInternalServerError).JSON(response)
+	available := h.bookService.CheckBookAvalable(id)
+	isAvalable := "available"
+	if available != nil {
+		isAvalable = "not available"
 	}
-	response := helper.APIResponse("status book", fiber.StatusOK, "success", available)
+	response := helper.APIResponse("status book", fiber.StatusOK, "success", isAvalable)
 	return c.Status(fiber.StatusOK).JSON(response)
 }

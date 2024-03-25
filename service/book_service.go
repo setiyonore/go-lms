@@ -12,7 +12,7 @@ type Book interface {
 	AddBook(input entities.AddBookInput) error
 	UpdateBook(inputId int, inputData entities.AddBookInput) error
 	DeleteBook(id int) error
-	CheckBookAvalable(id int) (bool, error)
+	CheckBookAvalable(id int) error
 }
 
 type book struct {
@@ -101,17 +101,11 @@ func (s *book) DeleteBook(id int) error {
 	return nil
 }
 
-func (s *book) CheckBookAvalable(id int) (bool, error) {
-	book, err := s.bookRepository.FindById(id)
-	if err != nil {
-		return false, err
+func (s *book) CheckBookAvalable(id int) error {
+	is_available := s.bookRepository.CheckBookAvalable(id)
+	if is_available == 1 {
+		return errors.New("book not available")
 	}
-	if book.ID == 0 {
-		err = errors.New("data not found")
-		return false, err
-	}
-	if book.IsAvailable == 0 {
-		return false, nil
-	}
-	return true, nil
+
+	return nil
 }

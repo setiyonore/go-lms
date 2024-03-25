@@ -16,7 +16,6 @@ type Book struct {
 	YearOfPublication string         `json:"year_of_publication"`
 	ImgUrlThumbnail   string         `json:"img_url_thumbnail"`
 	ImgUrlCover       string         `json:"img_url_cover"`
-	IsAvailable       int            `json:"is_available"`
 	CreatedAt         time.Time      `json:"-"`
 	UpdatedAt         time.Time      `json:"-"`
 	DeletedAt         gorm.DeletedAt `json:"-" gorm:"index"`
@@ -46,7 +45,6 @@ func FormatBook(book Book) Book {
 	bookFormatter.YearOfPublication = book.YearOfPublication
 	bookFormatter.ImgUrlThumbnail = book.ImgUrlThumbnail
 	bookFormatter.ImgUrlCover = book.ImgUrlCover
-	bookFormatter.IsAvailable = book.IsAvailable
 	bookFormatter.Publisher.ID = book.PublisherID
 	bookFormatter.Publisher.Name = book.Publisher.Name
 	bookFormatter.Author.ID = book.AuthorID

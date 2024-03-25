@@ -12,6 +12,7 @@ type Book interface {
 	Save(book entities.Book) error
 	Update(book entities.Book) error
 	Delete(id int) error
+	CheckBookAvalable(id int) int64
 }
 
 type book struct {
@@ -85,4 +86,16 @@ func (r *book) Delete(id int) error {
 		return err
 	}
 	return nil
+}
+
+func (r *book) CheckBookAvalable(id int) int64 {
+	// 1 = not available
+	//0 = available
+	var count int64
+	err := r.db.Model(&entities.BookBorrowDetails{}).
+		Where("id_book = ?", id).Count(&count).Error
+	if err != nil {
+		return 100 //auto not available
+	}
+	return count
 }
