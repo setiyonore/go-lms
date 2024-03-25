@@ -47,16 +47,6 @@ func (h *BookBorrowingsHandler) GetDetailBorrowing(c *fiber.Ctx) error {
 func (h *BookBorrowingsHandler) Add(c *fiber.Ctx) error {
 	var input entities.BookBorrowingInput
 	err := c.BodyParser(&input)
-	// input := entities.BookBorrowingInput{
-	// 	BorrowingDate: "2024-03-19",
-	// 	ReturnDate:    "2024-03-26",
-	// 	UserID:        1,
-	// 	Books: []entities.BookItem{
-	// 		{IDBook: 1},
-	// 		{IDBook: 2},
-	// 	},
-	// }
-	// // fmt.Println("handler", input)
 	if err != nil {
 		response := helper.APIResponse("failed parse data", fiber.StatusBadRequest, "error", nil)
 		return c.Status(fiber.StatusBadRequest).JSON(response)

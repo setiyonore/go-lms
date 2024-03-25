@@ -25,8 +25,9 @@ type BookBorrowingInput struct {
 	UserID        int        `json:"user_id" vaidate:"required"`
 	Books         []BookItem `json:"books" validate:"required"`
 }
+
 type BookItem struct {
-	IDBook int `json:"id_book" vaidate:"required"`
+	IDBook int `json:"book_id" vaidate:"required"`
 }
 
 func FormatBookBorrowing(bookborrowing BookBorrowings) BookBorrowings {

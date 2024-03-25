@@ -1,7 +1,6 @@
 package service
 
 import (
-	"fmt"
 	"go-lms/entities"
 	"go-lms/repository"
 )
@@ -45,7 +44,6 @@ func (s *bookborrowings) AddBookBorrowing(input entities.BookBorrowingInput) err
 	if err != nil {
 		return err
 	}
-	fmt.Println(input)
 	details := make([]entities.BookBorrowDetails, len(input.Books))
 	for i, book := range input.Books {
 		details[i].IdBook = uint(book.IDBook) // Potential issue here
