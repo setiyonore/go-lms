@@ -12,7 +12,9 @@ import (
 func NewBookBorrowingsRoute(app fiber.Router) {
 	db := *config.Database
 	bookBorrowingsRepository := repository.NewBookBorrowing(&db)
-	bookBorrowingService := service.NewBookBorrowing(bookBorrowingsRepository)
+	bookRepossitory := repository.NewBook(&db)
+	bookBorrowingService := service.NewBookBorrowing(bookBorrowingsRepository,
+		bookRepossitory)
 	bookBorrowingHandler := handlers.NewBookBorrowingHandler(bookBorrowingService)
 	app.Get("/book_borrowings", func(c *fiber.Ctx) error {
 		return bookBorrowingHandler.GetBookBorrowings(c)

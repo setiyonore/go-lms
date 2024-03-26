@@ -58,11 +58,12 @@ func (h *BookBorrowingsHandler) Add(c *fiber.Ctx) error {
 			fiber.StatusBadRequest, "error", nil)
 		return c.Status(fiber.StatusBadRequest).JSON(response)
 	}
-	err = h.bookBorrowingService.AddBookBorrowing(input)
+	var msg string
+	msg, err = h.bookBorrowingService.AddBookBorrowing(input)
 	if err != nil {
 		response := helper.APIResponse("failed to save book borrowing",
 			fiber.StatusInternalServerError,
-			"error", nil)
+			"error", msg)
 		return c.Status(fiber.StatusInternalServerError).JSON(response)
 	}
 	response := helper.APIResponse("success save book borrowing",

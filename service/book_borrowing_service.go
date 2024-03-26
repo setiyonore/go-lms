@@ -1,6 +1,7 @@
 package service
 
 import (
+	"errors"
 	"go-lms/entities"
 	"go-lms/repository"
 )
@@ -8,15 +9,16 @@ import (
 type BookBorrowings interface {
 	GetBookBorrowing() ([]entities.BookBorrowings, error)
 	GetDetailBorrowing(id int) (entities.BookBorrowings, error)
-	AddBookBorrowing(input entities.BookBorrowingInput) error
+	AddBookBorrowing(input entities.BookBorrowingInput) (string, error)
 }
 
 type bookborrowings struct {
 	bookBorrowingsRepository repository.BookBorrowing
+	bookRepository           repository.Book
 }
 
-func NewBookBorrowing(bookBorrowingRepository repository.BookBorrowing) *bookborrowings {
-	return &bookborrowings{bookBorrowingsRepository: bookBorrowingRepository}
+func NewBookBorrowing(bookBorrowingRepository repository.BookBorrowing, bookRepository repository.Book) *bookborrowings {
+	return &bookborrowings{bookBorrowingsRepository: bookBorrowingRepository, bookRepository: bookRepository}
 }
 
 func (s *bookborrowings) GetBookBorrowing() ([]entities.BookBorrowings, error) {
@@ -35,7 +37,18 @@ func (s *bookborrowings) GetDetailBorrowing(id int) (entities.BookBorrowings, er
 	return bookborrowing, nil
 }
 
-func (s *bookborrowings) AddBookBorrowing(input entities.BookBorrowingInput) error {
+func (s *bookborrowings) AddBookBorrowing(input entities.BookBorrowingInput) (string, error) {
+	var message string
+	details := make([]entities.BookBorrowDetails, len(input.Books))
+	for i, book := range input.Books {
+		details[i].IdBook = uint(book.IDBook)
+		count := s.bookRepository.CheckBookAvalable(book.IDBook)
+		if count > 0 {
+			book, _ := s.bookRepository.FindById(book.IDBook)
+			message = "book: " + book.Name + ", isbn: " + book.Isbn + " not available"
+			return message, errors.New("book not available")
+		}
+	}
 	BookBorowwing := entities.BookBorrowings{}
 	BookBorowwing.BorrowingDate = input.BorrowingDate
 	BookBorowwing.ReturnDate = input.ReturnDate
@@ -43,16 +56,15 @@ func (s *bookborrowings) AddBookBorrowing(input entities.BookBorrowingInput) err
 	BookBorowwing.MemberID = input.MemberID
 	result, err := s.bookBorrowingsRepository.SaveBorrowing(BookBorowwing)
 	if err != nil {
-		return err
-	}
-	details := make([]entities.BookBorrowDetails, len(input.Books))
-	for i, book := range input.Books {
-		details[i].IdBook = uint(book.IDBook) // Potential issue here
+		message = "failed save book borrowing"
+		return message, err
 	}
 	// fmt.Println("form service", details)
 	err = s.bookBorrowingsRepository.SaveBorrowingDetails(int(result.ID), details)
 	if err != nil {
-		return err
+		message = "failed save book borrowing"
+		return message, err
 	}
-	return nil
+	message = "success save book borrowing"
+	return message, nil
 }

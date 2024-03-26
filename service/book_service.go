@@ -103,7 +103,7 @@ func (s *book) DeleteBook(id int) error {
 
 func (s *book) CheckBookAvalable(id int) error {
 	is_available := s.bookRepository.CheckBookAvalable(id)
-	if is_available == 1 {
+	if is_available > 0 {
 		return errors.New("book not available")
 	}
 
