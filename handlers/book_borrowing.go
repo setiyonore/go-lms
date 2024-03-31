@@ -70,3 +70,31 @@ func (h *BookBorrowingsHandler) Add(c *fiber.Ctx) error {
 		fiber.StatusOK, "success", nil)
 	return c.Status(fiber.StatusOK).JSON(response)
 }
+
+func (h *BookBorrowingsHandler) Update(c *fiber.Ctx) error {
+	id, _ := strconv.Atoi(c.Params("id"))
+	var input entities.BookBorrowingInput
+	err := c.BodyParser(&input)
+	if err != nil {
+		response := helper.APIResponse("failed parse data", fiber.StatusBadRequest,
+			"error", nil)
+		return c.Status(fiber.StatusBadRequest).JSON(response)
+	}
+	validate := validator.New()
+	err = validate.Struct(&input)
+	if err != nil {
+		response := helper.APIResponse(helper.FormatterError(err.(validator.ValidationErrors)),
+			fiber.StatusBadRequest, "error", nil)
+		return c.Status(fiber.StatusBadRequest).JSON(response)
+	}
+	var msg string
+	msg, err = h.bookBorrowingService.UpdateBookBorrowing(id, input)
+	if err != nil {
+		response := helper.APIResponse("failed update book borrowing",
+			fiber.StatusInternalServerError, "error", msg)
+		return c.Status(fiber.StatusInternalServerError).JSON(response)
+	}
+	response := helper.APIResponse("success update book borrowing", fiber.StatusOK,
+		"success", nil)
+	return c.Status(fiber.StatusOK).JSON(response)
+}

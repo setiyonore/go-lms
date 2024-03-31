@@ -10,6 +10,7 @@ type BookBorrowings interface {
 	GetBookBorrowing() ([]entities.BookBorrowings, error)
 	GetDetailBorrowing(id int) (entities.BookBorrowings, error)
 	AddBookBorrowing(input entities.BookBorrowingInput) (string, error)
+	UpdateBookBorrowing(idBorrowing int, input entities.BookBorrowingInput) (string, error)
 }
 
 type bookborrowings struct {
@@ -66,5 +67,42 @@ func (s *bookborrowings) AddBookBorrowing(input entities.BookBorrowingInput) (st
 		return message, err
 	}
 	message = "success save book borrowing"
+	return message, nil
+}
+
+func (s *bookborrowings) UpdateBookBorrowing(idBorrowing int, input entities.BookBorrowingInput) (string, error) {
+	//TODO service update
+	var message string
+	bookBorrowing := entities.BookBorrowings{}
+	bookBorrowing.ID = uint(idBorrowing)
+	bookBorrowing.MemberID = input.MemberID
+	bookBorrowing.BorrowingDate = input.BorrowingDate
+	bookBorrowing.ReturnDate = input.ReturnDate
+	err := s.bookBorrowingsRepository.UpdateBorrowing(bookBorrowing)
+	if err != nil {
+		message = "failed to update book borrowing"
+		return message, err
+	}
+	err = s.bookBorrowingsRepository.DeleteBorrowingDetails(idBorrowing)
+	if err != nil {
+		return message, err
+	}
+
+	books := make([]entities.BookBorrowDetails, len(input.Books))
+	for i, book := range input.Books {
+		books[i].IdBook = uint(book.IDBook)
+		count := s.bookRepository.CheckBookAvalable(book.IDBook)
+		if count > 0 {
+			book, _ := s.bookRepository.FindById(book.IDBook)
+			message = "book: " + book.Name + ", isbn: " + book.Isbn + " not available"
+			return message, errors.New("book not available")
+		}
+	}
+	err = s.bookBorrowingsRepository.SaveBorrowingDetails(idBorrowing, books)
+	if err != nil {
+		message = "failed to update book borrowing"
+		return message, err
+	}
+	message = "success update book borrowing"
 	return message, nil
 }
