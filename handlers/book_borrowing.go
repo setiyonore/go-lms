@@ -98,3 +98,16 @@ func (h *BookBorrowingsHandler) Update(c *fiber.Ctx) error {
 		"success", nil)
 	return c.Status(fiber.StatusOK).JSON(response)
 }
+
+func (h *BookBorrowingsHandler) BookReturn(c *fiber.Ctx) error {
+	id, _ := strconv.Atoi(c.Params("id"))
+	err := h.bookBorrowingService.BookReturn(id)
+	if err != nil {
+		response := helper.APIResponse("failed to return book", fiber.StatusInternalServerError,
+			"error", nil)
+		return c.Status(fiber.StatusInternalServerError).JSON(response)
+	}
+	response := helper.APIResponse("success return book", fiber.StatusOK, "success",
+		nil)
+	return c.Status(fiber.StatusOK).JSON(response)
+}

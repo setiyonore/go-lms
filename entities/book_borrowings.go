@@ -12,8 +12,8 @@ type BookBorrowings struct {
 	ReturnDate          string              `json:"return_date"`
 	UserID              int                 `json:"-"`
 	MemberID            int                 `json:"-"`
-	IsLateReturn        bool                `json:"is_late_return"`
-	IsReturn            bool                `json:"is_return"`
+	IsLateReturn        int                 `json:"is_late_return"`
+	IsReturn            int                 `json:"is_return"`
 	CreatedAt           time.Time           `json:"-"`
 	UpdatedAt           time.Time           `json:"-"`
 	DeletedAt           gorm.DeletedAt      `json:"-"`

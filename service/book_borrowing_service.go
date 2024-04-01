@@ -4,6 +4,7 @@ import (
 	"errors"
 	"go-lms/entities"
 	"go-lms/repository"
+	"time"
 )
 
 type BookBorrowings interface {
@@ -11,6 +12,7 @@ type BookBorrowings interface {
 	GetDetailBorrowing(id int) (entities.BookBorrowings, error)
 	AddBookBorrowing(input entities.BookBorrowingInput) (string, error)
 	UpdateBookBorrowing(idBorrowing int, input entities.BookBorrowingInput) (string, error)
+	BookReturn(inputId int) error
 }
 
 type bookborrowings struct {
@@ -71,7 +73,6 @@ func (s *bookborrowings) AddBookBorrowing(input entities.BookBorrowingInput) (st
 }
 
 func (s *bookborrowings) UpdateBookBorrowing(idBorrowing int, input entities.BookBorrowingInput) (string, error) {
-	//TODO service update
 	var message string
 	bookBorrowing := entities.BookBorrowings{}
 	bookBorrowing.ID = uint(idBorrowing)
@@ -105,4 +106,30 @@ func (s *bookborrowings) UpdateBookBorrowing(idBorrowing int, input entities.Boo
 	}
 	message = "success update book borrowing"
 	return message, nil
+}
+
+func (s *bookborrowings) BookReturn(inputId int) error {
+	var dateFormat = "2006-01-02"
+	now := time.Now().UTC()
+	dateNow := now.Format(dateFormat)
+	bookBorrowing, err := s.bookBorrowingsRepository.GetDetail(inputId)
+	if err != nil {
+		return err
+	}
+	if bookBorrowing.ID == 0 {
+		return errors.New("data not found")
+	}
+	bookBorrowing.IsReturn = 1
+	if dateNow > bookBorrowing.BorrowingDate {
+		bookBorrowing.IsLateReturn = 1
+	}
+	err = s.bookBorrowingsRepository.BookReturn(bookBorrowing)
+	if err != nil {
+		return err
+	}
+	err = s.bookBorrowingsRepository.DeleteBorrowingDetails(inputId)
+	if err != nil {
+		return err
+	}
+	return nil
 }

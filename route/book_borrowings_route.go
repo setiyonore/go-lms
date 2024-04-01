@@ -28,4 +28,7 @@ func NewBookBorrowingsRoute(app fiber.Router) {
 	app.Put("/book_borrowings/:id", func(c *fiber.Ctx) error {
 		return bookBorrowingHandler.Update(c)
 	})
+	app.Get("/book_borrowings/return/:id", func(c *fiber.Ctx) error {
+		return bookBorrowingHandler.BookReturn(c)
+	})
 }

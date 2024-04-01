@@ -13,6 +13,7 @@ type BookBorrowing interface {
 	SaveBorrowingDetails(idBorrowing int, dataDetails []entities.BookBorrowDetails) error
 	UpdateBorrowing(bookBorrowing entities.BookBorrowings) error
 	DeleteBorrowingDetails(idBorrowing int) error
+	BookReturn(bookBorrowing entities.BookBorrowings) error
 }
 
 type bookborrowing struct {
@@ -81,7 +82,6 @@ func (r *bookborrowing) SaveBorrowingDetails(idBorrowing int, dataDetails []enti
 }
 
 func (r *bookborrowing) UpdateBorrowing(bookBorrowing entities.BookBorrowings) error {
-	//TODO book borrowing repository
 	err := r.db.Updates(&bookBorrowing).Error
 	if err != nil {
 		return err
@@ -92,6 +92,19 @@ func (r *bookborrowing) UpdateBorrowing(bookBorrowing entities.BookBorrowings) e
 func (r *bookborrowing) DeleteBorrowingDetails(idBorrowing int) error {
 	var data entities.BookBorrowDetails
 	err := r.db.Where("id_book_borrow = ?", idBorrowing).Delete(&data).Error
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (r *bookborrowing) BookReturn(data entities.BookBorrowings) error {
+	//TODO
+	err := r.db.Model(&entities.BookBorrowings{}).Where("id = ?", data.ID).
+		Updates(entities.BookBorrowings{
+			IsLateReturn: data.IsLateReturn,
+			IsReturn:     1,
+		}).Error
 	if err != nil {
 		return err
 	}

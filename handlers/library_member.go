@@ -46,7 +46,7 @@ func (h *LibraryMemberHandler) GetLibraryMemberById(c *fiber.Ctx) error {
 
 func (h *LibraryMemberHandler) GetLibraryMemberByName(c *fiber.Ctx) error {
 	var input entities.LibrarryMemberSearchByName
-	data := entities.LibrarryMembers{}
+	var data entities.LibrarryMembers
 	err := c.BodyParser(&input)
 	if err != nil {
 		response := helper.APIResponse("failed to parse data", fiber.StatusBadRequest,

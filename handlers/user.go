@@ -76,7 +76,7 @@ func (u *UserHandler) AddUser(ctx *fiber.Ctx) error {
 	}
 	var availEmail bool
 	availEmail, _ = u.userService.IsEmailAvailable(input.Email)
-	if availEmail != true {
+	if !availEmail {
 		response := helper.APIResponse("Email has already use", fiber.StatusBadRequest, "error", nil)
 		return ctx.Status(fiber.StatusBadRequest).JSON(response)
 	}
