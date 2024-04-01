@@ -18,7 +18,7 @@ type BookBorrowings struct {
 	UpdatedAt           time.Time           `json:"-"`
 	DeletedAt           gorm.DeletedAt      `json:"-"`
 	User                user                `gorm:"foreignkey:UserID"`
-	LibrarryMember      librarryMember      `gorm:"foreignKey:MemberID"`
+	LibrarryMember      LibrarryMember      `gorm:"foreignKey:MemberID"`
 	BookBorrowingDetail []BookBorrowDetails `gorm:"foreignkey:IdBookBorrow"`
 }
 type BookBorrowingInput struct {
@@ -59,7 +59,7 @@ type user struct {
 	Name string `json:"name"`
 }
 
-type librarryMember struct {
+type LibrarryMember struct {
 	ID   int    `json:"-"`
 	Name string `json:"name"`
 }

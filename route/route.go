@@ -18,4 +18,5 @@ func Init(app *fiber.App) {
 	NewPublihserRoute(privateRoute)
 	NewAuthorRoute(privateRoute)
 	NewUserRoute(privateRoute)
+	NewLateChargeRoute(privateRoute)
 }
