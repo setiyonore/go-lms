@@ -17,4 +17,7 @@ func NewLateChargeRoute(app fiber.Router) {
 	app.Get("/late_charges", func(c *fiber.Ctx) error {
 		return LateChargeHandler.GetLateCharge(c)
 	})
+	app.Get("/late_charges/:id", func(c *fiber.Ctx) error {
+		return LateChargeHandler.GetLateChargeById(c)
+	})
 }
