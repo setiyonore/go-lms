@@ -25,6 +25,7 @@ func (a *jwtAuth) GenerateToken(User entities.User) (string, error) {
 		"email": User.Email,
 		"id":    User.ID,
 		"exp":   time.Now().Add(time.Hour * 72).Unix(),
+		//"exp": time.Now().Add(time.Minute * 1).Unix(),
 	}
 	// Create token
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)

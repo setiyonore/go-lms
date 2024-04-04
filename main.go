@@ -18,7 +18,7 @@ func main() {
 	app.Use(logger.New(loggerConfig))
 	app.Use(limiter.New(config.Limiter))
 	app.Use(cors.New(cors.Config{
-		AllowOrigins:     "http://127.0.0.1:3000",
+		AllowOrigins:     "http://127.0.0.1:3000,http://localhost:3000",
 		AllowMethods:     "*",
 		AllowHeaders:     "Origin, Content-Type, Accept, Content-Length, Accept-Language, Accept-Encoding, Connection, Access-Control-Allow-Origin", // Adapt if required
 		AllowCredentials: true,

@@ -26,8 +26,8 @@ func NewBook(db *gorm.DB) *book {
 func (r *book) FindAll() ([]entities.Book, error) {
 	var books []entities.Book
 	err := r.db.
-		Select("id", "name", "description", "publisher_id", "author_id", "isbn",
-			"year_of_publication", "img_url_thumbnail", "img_url_cover", "is_available").
+		Select("id", "name", "publisher_id", "author_id", "isbn",
+			"year_of_publication").
 		Preload("Publisher", func(db *gorm.DB) *gorm.DB {
 			return db.Select("id", "name")
 		}).
