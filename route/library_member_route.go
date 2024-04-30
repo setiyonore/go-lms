@@ -29,4 +29,7 @@ func NewLibraryMemberRoute(app fiber.Router) {
 	app.Put("library_members/:id", func(c *fiber.Ctx) error {
 		return libraryMemberHandler.UpdateLibrarryMember(c)
 	})
+	app.Delete("library_members/:id", func(c *fiber.Ctx) error {
+		return libraryMemberHandler.DeleteLibrarryMember(c)
+	})
 }
