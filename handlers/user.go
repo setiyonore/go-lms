@@ -90,7 +90,7 @@ func (u *UserHandler) AddUser(ctx *fiber.Ctx) error {
 }
 func (u *UserHandler) UpdateUser(ctx *fiber.Ctx) error {
 	Id, _ := strconv.Atoi(ctx.Params("id"))
-	var input entities.AddUserInput
+	var input entities.EditUserInput
 	err := ctx.BodyParser(&input)
 	if err != nil {
 		response := helper.APIResponse("failed to parse data", fiber.StatusBadRequest, "error", nil)

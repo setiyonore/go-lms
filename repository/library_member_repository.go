@@ -26,6 +26,7 @@ func (r *librarymember) FindAll() ([]entities.LibrarryMembers, error) {
 	var libraryMembers []entities.LibrarryMembers
 	err := r.db.
 		Select("id", "name", "phone_number").
+		Limit(10).
 		Find(&libraryMembers).Error
 	if err != nil {
 		return libraryMembers, err

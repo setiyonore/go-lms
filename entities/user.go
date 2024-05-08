@@ -24,7 +24,13 @@ type AddUserInput struct {
 	Name     string `json:"name" validate:"required,min=3"`
 	Email    string `json:"email" validate:"required,email"`
 	Password string `json:"password" validate:"required,min=8"`
-	Role     int    `json:"role"`
+	// Role     int    `json:"role"`
+}
+type EditUserInput struct {
+	Name     string `json:"name" validate:"required,min=3"`
+	Email    string `json:"email" validate:"required,email"`
+	Password string `json:"password"`
+	// Role     int    `json:"role"`
 }
 
 func FormatUser(user User) User {

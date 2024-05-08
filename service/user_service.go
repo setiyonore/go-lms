@@ -14,7 +14,7 @@ type User interface {
 	GetUserByEmail(Email string) (entities.User, error)
 	AddUser(Input entities.AddUserInput) error
 	IsEmailAvailable(Email string) (bool, error)
-	UpdateUser(inputID int, inputData entities.AddUserInput) error
+	UpdateUser(inputID int, inputData entities.EditUserInput) error
 	DeleteUser(id int) error
 }
 
@@ -78,7 +78,7 @@ func (u *user) IsEmailAvailable(Email string) (bool, error) {
 	return false, nil
 }
 
-func (u *user) UpdateUser(inputId int, inputData entities.AddUserInput) error {
+func (u *user) UpdateUser(inputId int, inputData entities.EditUserInput) error {
 	user, err := u.userRepository.FindById(inputId)
 	if err != nil {
 		return err
@@ -89,11 +89,13 @@ func (u *user) UpdateUser(inputId int, inputData entities.AddUserInput) error {
 	user.Name = inputData.Name
 	user.Email = inputData.Email
 	// user.Role = inputData.Role
-	passwordHash, err := bcrypt.GenerateFromPassword([]byte(inputData.Password), bcrypt.MinCost)
-	if err != nil {
-		return err
+	if len(inputData.Password) > 0 {
+		passwordHash, err := bcrypt.GenerateFromPassword([]byte(inputData.Password), bcrypt.MinCost)
+		if err != nil {
+			return err
+		}
+		user.Password = string(passwordHash)
 	}
-	user.Password = string(passwordHash)
 	err = u.userRepository.Update(user)
 	if err != nil {
 		return err
