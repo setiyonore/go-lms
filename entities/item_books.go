@@ -17,7 +17,7 @@ func FormatItemBook(itemBook ItemBook) ItemBook {
 	formatter := ItemBook{}
 
 	formatter.ID = itemBook.ID
-	formatter.IdBook = itemBook.ID
+	formatter.IdBook = itemBook.IdBook
 	formatter.Isbn = itemBook.Isbn
 	formatter.Status = itemBook.Status
 	return formatter

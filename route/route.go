@@ -15,6 +15,7 @@ func Init(app *fiber.App) {
 	NewLibraryMemberRoute(privateRoute)
 	NewBookBorrowingsRoute(privateRoute)
 	NewBoookRoute(privateRoute)
+	NewItemBookRoute(privateRoute)
 	NewPublihserRoute(privateRoute)
 	NewAuthorRoute(privateRoute)
 	NewUserRoute(privateRoute)
