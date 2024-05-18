@@ -7,6 +7,7 @@ import (
 
 type ItemBook interface {
 	GetItemBook() ([]entities.ItemBook, error)
+	GetItemBookById(id int) (entities.ItemBook, error)
 }
 type itemBook struct {
 	itemBookRepository repository.ItemBook
@@ -22,4 +23,12 @@ func (s *itemBook) GetItemBook() ([]entities.ItemBook, error) {
 		return itemBooks, err
 	}
 	return itemBooks, nil
+}
+
+func (s *itemBook) GetItemBookById(id int) (entities.ItemBook, error) {
+	itemBook, err := s.itemBookRepository.FIndById(id)
+	if err != nil {
+		return itemBook, err
+	}
+	return itemBook, nil
 }
