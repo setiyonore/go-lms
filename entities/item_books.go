@@ -10,7 +10,7 @@ type ItemBook struct {
 type AddItemBookInput struct {
 	IdBook int    `json:"id_book" validate:"required"`
 	Isbn   string `json:"isbn" validate:"required"`
-	Status string `json:"status" validate:"required"`
+	Status int    `json:"status" validate:"required"`
 }
 
 func FormatItemBook(itemBook ItemBook) ItemBook {

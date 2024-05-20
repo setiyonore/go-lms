@@ -20,4 +20,7 @@ func NewItemBookRoute(app fiber.Router) {
 	app.Get("/item_book/:id", func(c *fiber.Ctx) error {
 		return ItemBookHandler.GetItemBookById(c)
 	})
+	app.Post("/item_book", func(c *fiber.Ctx) error {
+		return ItemBookHandler.AddItemBook(c)
+	})
 }

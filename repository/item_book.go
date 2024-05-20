@@ -9,6 +9,7 @@ import (
 type ItemBook interface {
 	FindAll() ([]entities.ItemBook, error)
 	FIndById(id int) (entities.ItemBook, error)
+	Save(itemBook entities.ItemBook) error
 }
 
 type itemBook struct {
@@ -36,4 +37,12 @@ func (r *itemBook) FIndById(id int) (entities.ItemBook, error) {
 		return itemBook, err
 	}
 	return itemBook, nil
+}
+
+func (r *itemBook) Save(itemBook entities.ItemBook) error {
+	err := r.db.Save(&itemBook).Error
+	if err != nil {
+		return err
+	}
+	return nil
 }

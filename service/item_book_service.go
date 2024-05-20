@@ -8,6 +8,7 @@ import (
 type ItemBook interface {
 	GetItemBook() ([]entities.ItemBook, error)
 	GetItemBookById(id int) (entities.ItemBook, error)
+	AddItemBook(input entities.AddItemBookInput) error
 }
 type itemBook struct {
 	itemBookRepository repository.ItemBook
@@ -31,4 +32,16 @@ func (s *itemBook) GetItemBookById(id int) (entities.ItemBook, error) {
 		return itemBook, err
 	}
 	return itemBook, nil
+}
+
+func (s *itemBook) AddItemBook(input entities.AddItemBookInput) error {
+	itemBook := entities.ItemBook{}
+	itemBook.IdBook = input.IdBook
+	itemBook.Isbn = input.Isbn
+	itemBook.Status = input.Status
+	err := s.itemBookRepository.Save(itemBook)
+	if err != nil {
+		return err
+	}
+	return nil
 }
