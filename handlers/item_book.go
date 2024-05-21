@@ -62,3 +62,26 @@ func (h *ItemBookHandler) AddItemBook(c *fiber.Ctx) error {
 	response := helper.APIResponse("success save item book", fiber.StatusOK, "success", nil)
 	return c.Status(fiber.StatusOK).JSON(response)
 }
+
+func (h *ItemBookHandler) UpdateItemBook(c *fiber.Ctx) error {
+	id, _ := strconv.Atoi(c.Params("id"))
+	var input entities.AddItemBookInput
+	err := c.BodyParser(&input)
+	if err != nil {
+		response := helper.APIResponse("failed parse data", fiber.StatusBadRequest, "error", nil)
+		return c.Status(fiber.StatusBadRequest).JSON(response)
+	}
+	validate := validator.New()
+	err = validate.Struct(&input)
+	if err != nil {
+		response := helper.APIResponse(helper.FormatterError(err.(validator.ValidationErrors)), fiber.StatusBadRequest, "error", nil)
+		return c.Status(fiber.StatusBadRequest).JSON(response)
+	}
+	err = h.itemBookService.UpdateItemBook(id, input)
+	if err != nil {
+		response := helper.APIResponse("failed update item book", fiber.StatusInternalServerError, "error", nil)
+		return c.Status(fiber.StatusInternalServerError).JSON(response)
+	}
+	response := helper.APIResponse("success update item book", fiber.StatusOK, "success", nil)
+	return c.Status(fiber.StatusOK).JSON(response)
+}

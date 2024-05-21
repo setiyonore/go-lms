@@ -1,6 +1,7 @@
 package service
 
 import (
+	"errors"
 	"go-lms/entities"
 	"go-lms/repository"
 )
@@ -9,6 +10,7 @@ type ItemBook interface {
 	GetItemBook() ([]entities.ItemBook, error)
 	GetItemBookById(id int) (entities.ItemBook, error)
 	AddItemBook(input entities.AddItemBookInput) error
+	UpdateItemBook(inputId int, input entities.AddItemBookInput) error
 }
 type itemBook struct {
 	itemBookRepository repository.ItemBook
@@ -40,6 +42,27 @@ func (s *itemBook) AddItemBook(input entities.AddItemBookInput) error {
 	itemBook.Isbn = input.Isbn
 	itemBook.Status = input.Status
 	err := s.itemBookRepository.Save(itemBook)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (s *itemBook) UpdateItemBook(inputId int, input entities.AddItemBookInput) error {
+	itemBook, err := s.itemBookRepository.FIndById(inputId)
+	if err != nil {
+		return err
+	}
+	if itemBook.ID == 0 {
+		err = errors.New("data not found")
+		return err
+	}
+	itemBook = entities.ItemBook{}
+	itemBook.ID = inputId
+	itemBook.IdBook = input.IdBook
+	itemBook.Isbn = input.Isbn
+	itemBook.Status = input.Status
+	err = s.itemBookRepository.Update(itemBook)
 	if err != nil {
 		return err
 	}
