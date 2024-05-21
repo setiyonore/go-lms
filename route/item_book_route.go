@@ -26,4 +26,7 @@ func NewItemBookRoute(app fiber.Router) {
 	app.Put("/item_book/:id", func(c *fiber.Ctx) error {
 		return ItemBookHandler.UpdateItemBook(c)
 	})
+	app.Get("/item_book/update_status/:id/:status", func(c *fiber.Ctx) error {
+		return ItemBookHandler.UpdateStatusItemBook(c)
+	})
 }

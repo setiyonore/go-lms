@@ -85,3 +85,15 @@ func (h *ItemBookHandler) UpdateItemBook(c *fiber.Ctx) error {
 	response := helper.APIResponse("success update item book", fiber.StatusOK, "success", nil)
 	return c.Status(fiber.StatusOK).JSON(response)
 }
+
+func (h *ItemBookHandler) UpdateStatusItemBook(c *fiber.Ctx) error {
+	id, _ := strconv.Atoi(c.Params("id"))
+	status, _ := strconv.Atoi(c.Params("status"))
+	err := h.itemBookService.UpdateStatusItemBook(id, status)
+	if err != nil {
+		response := helper.APIResponse("failed update status item book", fiber.StatusInternalServerError, "error", nil)
+		return c.Status(fiber.StatusInternalServerError).JSON(response)
+	}
+	response := helper.APIResponse("success update status item book", fiber.StatusOK, "success", nil)
+	return c.Status(fiber.StatusOK).JSON(response)
+}

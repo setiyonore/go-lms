@@ -11,6 +11,7 @@ type ItemBook interface {
 	FIndById(id int) (entities.ItemBook, error)
 	Save(itemBook entities.ItemBook) error
 	Update(itemBook entities.ItemBook) error
+	UpdateStatus(id int, status int) error
 }
 
 type itemBook struct {
@@ -50,6 +51,15 @@ func (r *itemBook) Save(itemBook entities.ItemBook) error {
 
 func (r *itemBook) Update(itemBook entities.ItemBook) error {
 	err := r.db.Updates(&itemBook).Error
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (r *itemBook) UpdateStatus(id int, status int) error {
+	itemBook := entities.ItemBook{}
+	err := r.db.Model(&itemBook).Where("id", id).Update("status", status).Error
 	if err != nil {
 		return err
 	}
