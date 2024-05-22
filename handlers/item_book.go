@@ -97,3 +97,14 @@ func (h *ItemBookHandler) UpdateStatusItemBook(c *fiber.Ctx) error {
 	response := helper.APIResponse("success update status item book", fiber.StatusOK, "success", nil)
 	return c.Status(fiber.StatusOK).JSON(response)
 }
+
+func (h *ItemBookHandler) DeleteItemBook(c *fiber.Ctx) error {
+	id, _ := strconv.Atoi(c.Params("id"))
+	err := h.itemBookService.DeleteItemBook(id)
+	if err != nil {
+		response := helper.APIResponse("failed delete item book", fiber.StatusInternalServerError, "error", nil)
+		return c.Status(fiber.StatusInternalServerError).JSON(response)
+	}
+	response := helper.APIResponse("success delete item book", fiber.StatusOK, "success", nil)
+	return c.Status(fiber.StatusOK).JSON(response)
+}

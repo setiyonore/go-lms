@@ -12,6 +12,7 @@ type ItemBook interface {
 	AddItemBook(input entities.AddItemBookInput) error
 	UpdateItemBook(inputId int, input entities.AddItemBookInput) error
 	UpdateStatusItemBook(id int, status int) error
+	DeleteItemBook(id int) error
 }
 type itemBook struct {
 	itemBookRepository repository.ItemBook
@@ -80,6 +81,21 @@ func (s *itemBook) UpdateStatusItemBook(id int, status int) error {
 		return err
 	}
 	err = s.itemBookRepository.UpdateStatus(id, status)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (s *itemBook) DeleteItemBook(id int) error {
+	itemBook, err := s.itemBookRepository.FIndById(id)
+	if err != nil {
+		return err
+	}
+	if itemBook.ID == 0 {
+		return errors.New("data not found")
+	}
+	err = s.itemBookRepository.Delete(id)
 	if err != nil {
 		return err
 	}

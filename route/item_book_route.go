@@ -29,4 +29,7 @@ func NewItemBookRoute(app fiber.Router) {
 	app.Get("/item_book/update_status/:id/:status", func(c *fiber.Ctx) error {
 		return ItemBookHandler.UpdateStatusItemBook(c)
 	})
+	app.Delete("/item_book/:id", func(c *fiber.Ctx) error {
+		return ItemBookHandler.DeleteItemBook(c)
+	})
 }

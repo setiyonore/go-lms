@@ -12,6 +12,7 @@ type ItemBook interface {
 	Save(itemBook entities.ItemBook) error
 	Update(itemBook entities.ItemBook) error
 	UpdateStatus(id int, status int) error
+	Delete(id int) error
 }
 
 type itemBook struct {
@@ -60,6 +61,19 @@ func (r *itemBook) Update(itemBook entities.ItemBook) error {
 func (r *itemBook) UpdateStatus(id int, status int) error {
 	itemBook := entities.ItemBook{}
 	err := r.db.Model(&itemBook).Where("id", id).Update("status", status).Error
+	if err != nil {
+		return err
+	}
+	return nil
+}
+func (r *itemBook) Delete(id int) error {
+	var itemBook entities.ItemBook
+
+	err := r.db.Where("id", id).First(&itemBook).Error
+	if err != nil {
+		return err
+	}
+	err = r.db.Delete(&itemBook).Error
 	if err != nil {
 		return err
 	}
