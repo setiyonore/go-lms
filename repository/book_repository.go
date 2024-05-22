@@ -13,6 +13,7 @@ type Book interface {
 	Update(book entities.Book) error
 	Delete(id int) error
 	CheckBookAvalable(id int) int64
+	GetItemBook(id int) (entities.Book, error)
 }
 
 type book struct {
@@ -98,4 +99,23 @@ func (r *book) CheckBookAvalable(id int) int64 {
 		return 100 //auto not available
 	}
 	return count
+}
+
+func (r *book) GetItemBook(id int) (entities.Book, error) {
+	var book entities.Book
+
+	err := r.db.Where("id = ?", id).
+		Preload("Publisher", func(db *gorm.DB) *gorm.DB {
+			return db.Select("id", "name")
+		}).
+		Preload("Author", func(db *gorm.DB) *gorm.DB {
+			return db.Select("id", "name")
+		}).
+		Preload("ItemBooks").
+		Find(&book).Error
+	if err != nil {
+		return book, err
+	}
+
+	return book, nil
 }

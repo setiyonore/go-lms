@@ -106,3 +106,13 @@ func (h *BookHandler) CheckBookAvalable(c *fiber.Ctx) error {
 	response := helper.APIResponse("status book", fiber.StatusOK, "success", isAvalable)
 	return c.Status(fiber.StatusOK).JSON(response)
 }
+func (h *BookHandler) GetBookItem(c *fiber.Ctx) error {
+	id, _ := strconv.Atoi(c.Params("id"))
+	book, err := h.bookService.GetBookItem(id)
+	if err != nil {
+		response := helper.APIResponse("failed to find book", fiber.StatusBadRequest, "error", nil)
+		return c.Status(fiber.StatusBadRequest).JSON(response)
+	}
+	response := helper.APIResponse("book item", fiber.StatusOK, "success", entities.FormatBook(book))
+	return c.Status(fiber.StatusOK).JSON(response)
+}

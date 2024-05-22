@@ -13,6 +13,7 @@ type Book interface {
 	UpdateBook(inputId int, inputData entities.AddBookInput) error
 	DeleteBook(id int) error
 	CheckBookAvalable(id int) error
+	GetBookItem(id int) (entities.Book, error)
 }
 
 type book struct {
@@ -108,4 +109,16 @@ func (s *book) CheckBookAvalable(id int) error {
 	}
 
 	return nil
+}
+
+func (s *book) GetBookItem(id int) (entities.Book, error) {
+	book, err := s.bookRepository.GetItemBook(id)
+	if err != nil {
+		return book, err
+	}
+	if book.ID == 0 {
+		err = errors.New("data not found")
+		return book, err
+	}
+	return book, nil
 }

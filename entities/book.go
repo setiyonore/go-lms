@@ -21,6 +21,17 @@ type Book struct {
 	DeletedAt         gorm.DeletedAt `json:"-" gorm:"index"`
 	Publisher         Publisher      `gorm:"foreignkey:PublisherID"`
 	Author            Author         `gorm:"foreignkey:AuthorID"`
+	ItemBooks         []itemBook     `gorm:"foreignkey:IdBook;references:ID"`
+}
+
+type itemBook struct {
+	ID        uint           `json:"id" gorm:"primary_key"`
+	IdBook    uint           `json:"id_book" gorm:"index"`
+	Isbn      string         `json:"isbn"`
+	Status    int            `json:"status"`
+	CreatedAt time.Time      `json:"-"`
+	UpdatedAt time.Time      `json:"-"`
+	DeletedAt gorm.DeletedAt `json:"-" gorm:"index"`
 }
 
 type AddBookInput struct {
@@ -49,6 +60,7 @@ func FormatBook(book Book) Book {
 	bookFormatter.Publisher.Name = book.Publisher.Name
 	bookFormatter.Author.ID = book.AuthorID
 	bookFormatter.Author.Name = book.Author.Name
+	bookFormatter.ItemBooks = book.ItemBooks
 	return bookFormatter
 }
 
@@ -59,4 +71,13 @@ func FormatBooks(books []Book) []Book {
 		booksFormatter = append(booksFormatter, bookFormatter)
 	}
 	return booksFormatter
+}
+
+func FormatBookItem(ib itemBook) itemBook {
+	itemBookFormatter := itemBook{}
+	itemBookFormatter.ID = ib.ID
+	itemBookFormatter.IdBook = ib.IdBook
+	itemBookFormatter.Isbn = ib.Isbn
+	itemBookFormatter.Status = ib.Status
+	return itemBookFormatter
 }

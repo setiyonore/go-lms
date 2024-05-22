@@ -32,4 +32,7 @@ func NewBoookRoute(app fiber.Router) {
 	app.Get("/books/checkBookStatus/:id", func(c *fiber.Ctx) error {
 		return bookHandler.CheckBookAvalable(c)
 	})
+	app.Get("/books/getBookItem/:id", func(c *fiber.Ctx) error {
+		return bookHandler.GetBookItem(c)
+	})
 }
