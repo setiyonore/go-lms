@@ -64,14 +64,8 @@ type LibrarryMember struct {
 	Name string `json:"name"`
 }
 type BookBorrowDetails struct {
-	ID           uint `json:"id"`
-	IdBookBorrow uint `json:"-"`
-	IdBook       uint `json:"-"`
-	Book         book `gorm:"foreignkey:IdBook"`
-}
-
-type book struct {
-	ID   uint   `json:"-"`
-	Name string `json:"name"`
-	Isbn string `json:"isbn"`
+	ID           uint     `json:"id"`
+	IdBookBorrow uint     `json:"-"`
+	IdItemBook   uint     `json:"-"`
+	ItemBook     ItemBook `gorm:"foreignkey:IdItemBook"`
 }

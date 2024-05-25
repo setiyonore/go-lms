@@ -44,7 +44,7 @@ func (s *bookborrowings) AddBookBorrowing(input entities.BookBorrowingInput) (st
 	var message string
 	details := make([]entities.BookBorrowDetails, len(input.Books))
 	for i, book := range input.Books {
-		details[i].IdBook = uint(book.IDBook)
+		details[i].IdItemBook = uint(book.IDBook)
 		count := s.bookRepository.CheckBookAvalable(book.IDBook)
 		if count > 0 {
 			book, _ := s.bookRepository.FindById(book.IDBook)
@@ -91,7 +91,7 @@ func (s *bookborrowings) UpdateBookBorrowing(idBorrowing int, input entities.Boo
 
 	books := make([]entities.BookBorrowDetails, len(input.Books))
 	for i, book := range input.Books {
-		books[i].IdBook = uint(book.IDBook)
+		books[i].IdItemBook = uint(book.IDBook)
 		count := s.bookRepository.CheckBookAvalable(book.IDBook)
 		if count > 0 {
 			book, _ := s.bookRepository.FindById(book.IDBook)

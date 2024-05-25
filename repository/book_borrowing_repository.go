@@ -51,8 +51,8 @@ func (r *bookborrowing) GetDetail(id int) (entities.BookBorrowings, error) {
 		Preload("LibrarryMember", func(db *gorm.DB) *gorm.DB {
 			return db.Select("id", "name")
 		}).
-		Preload("BookBorrowingDetail.Book", func(db *gorm.DB) *gorm.DB {
-			return db.Select("id", "name", "isbn")
+		Preload("BookBorrowingDetail.ItemBook", func(db *gorm.DB) *gorm.DB {
+			return db.Select("id", "isbn", "status", "id_book")
 		}).
 		Find(&bookborrowing).Error
 
