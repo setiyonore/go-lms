@@ -108,3 +108,16 @@ func (h *ItemBookHandler) DeleteItemBook(c *fiber.Ctx) error {
 	response := helper.APIResponse("success delete item book", fiber.StatusOK, "success", nil)
 	return c.Status(fiber.StatusOK).JSON(response)
 }
+
+func (h *ItemBookHandler) GetItemBookByIdBook(c *fiber.Ctx) error {
+	id, _ := strconv.Atoi(c.Params("id"))
+	itembBooks, err := h.itemBookService.GetItemBookByIdBook(id)
+	if err != nil {
+		response := helper.APIResponse("failed to get item books", fiber.StatusInternalServerError,
+			"eror", nil)
+		return c.Status(fiber.StatusInternalServerError).JSON(response)
+	}
+	response := helper.APIResponse("list of item books", fiber.StatusOK, "success",
+		entities.FormatItemBooks(itembBooks))
+	return c.Status(fiber.StatusOK).JSON(response)
+}

@@ -32,4 +32,7 @@ func NewItemBookRoute(app fiber.Router) {
 	app.Delete("/item_book/:id", func(c *fiber.Ctx) error {
 		return ItemBookHandler.DeleteItemBook(c)
 	})
+	app.Get("/item_book/getByIdBook/:id", func(c *fiber.Ctx) error {
+		return ItemBookHandler.GetItemBookByIdBook(c)
+	})
 }

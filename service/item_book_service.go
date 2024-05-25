@@ -9,6 +9,7 @@ import (
 type ItemBook interface {
 	GetItemBook() ([]entities.ItemBook, error)
 	GetItemBookById(id int) (entities.ItemBook, error)
+	GetItemBookByIdBook(id int) ([]entities.ItemBook, error)
 	AddItemBook(input entities.AddItemBookInput) error
 	UpdateItemBook(inputId int, input entities.AddItemBookInput) error
 	UpdateStatusItemBook(id int, status int) error
@@ -100,4 +101,12 @@ func (s *itemBook) DeleteItemBook(id int) error {
 		return err
 	}
 	return nil
+}
+
+func (s *itemBook) GetItemBookByIdBook(id int) ([]entities.ItemBook, error) {
+	itembBooks, err := s.itemBookRepository.FIndByIdBook(id)
+	if err != nil {
+		return itembBooks, err
+	}
+	return itembBooks, nil
 }

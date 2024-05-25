@@ -9,6 +9,7 @@ import (
 type ItemBook interface {
 	FindAll() ([]entities.ItemBook, error)
 	FIndById(id int) (entities.ItemBook, error)
+	FIndByIdBook(id int) ([]entities.ItemBook, error)
 	Save(itemBook entities.ItemBook) error
 	Update(itemBook entities.ItemBook) error
 	UpdateStatus(id int, status int) error
@@ -78,4 +79,14 @@ func (r *itemBook) Delete(id int) error {
 		return err
 	}
 	return nil
+}
+
+func (r *itemBook) FIndByIdBook(id int) ([]entities.ItemBook, error) {
+	var itemBooks []entities.ItemBook
+	err := r.db.Where("id_book", id).Select("id", "isbn", "id_book", "status").
+		Find(&itemBooks).Error
+	if err != nil {
+		return itemBooks, err
+	}
+	return itemBooks, nil
 }
