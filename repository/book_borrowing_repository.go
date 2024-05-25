@@ -28,8 +28,11 @@ func (r *bookborrowing) GetAll() ([]entities.BookBorrowings, error) {
 	var bookBorrowings []entities.BookBorrowings
 	err := r.db.
 		Select("id", "borrowing_date", "return_date", "is_late_return", "is_return",
-			"user_id").
+			"user_id", "member_id").
 		Preload("User", func(db *gorm.DB) *gorm.DB {
+			return db.Select("id", "name")
+		}).
+		Preload("LibrarryMember", func(db *gorm.DB) *gorm.DB {
 			return db.Select("id", "name")
 		}).
 		Find(&bookBorrowings).Error
