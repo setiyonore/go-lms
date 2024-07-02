@@ -121,3 +121,15 @@ func (h *ItemBookHandler) GetItemBookByIdBook(c *fiber.Ctx) error {
 		entities.FormatItemBooks(itembBooks))
 	return c.Status(fiber.StatusOK).JSON(response)
 }
+
+func (h *ItemBookHandler) GetItemBookByIdBookAvailable(c *fiber.Ctx) error {
+	id, _ := strconv.Atoi(c.Params("id"))
+	itemBooks, err := h.itemBookService.GetItemBookByIdBookAvailable(id)
+	if err != nil {
+		response := helper.APIResponse("failed to get item books", fiber.StatusInternalServerError, "error", nil)
+		return c.Status(fiber.StatusInternalServerError).JSON(response)
+	}
+	response := helper.APIResponse("list of item books", fiber.StatusOK, "success",
+		entities.FormatItemBooks(itemBooks))
+	return c.Status(fiber.StatusOK).JSON(response)
+}

@@ -35,4 +35,7 @@ func NewItemBookRoute(app fiber.Router) {
 	app.Get("/item_book/getByIdBook/:id", func(c *fiber.Ctx) error {
 		return ItemBookHandler.GetItemBookByIdBook(c)
 	})
+	app.Get("/item_book/getByIdBookAvailable/:id", func(c *fiber.Ctx) error {
+		return ItemBookHandler.GetItemBookByIdBookAvailable(c)
+	})
 }

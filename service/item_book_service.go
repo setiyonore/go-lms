@@ -10,6 +10,7 @@ type ItemBook interface {
 	GetItemBook() ([]entities.ItemBook, error)
 	GetItemBookById(id int) (entities.ItemBook, error)
 	GetItemBookByIdBook(id int) ([]entities.ItemBook, error)
+	GetItemBookByIdBookAvailable(id int) ([]entities.ItemBook, error)
 	AddItemBook(input entities.AddItemBookInput) error
 	UpdateItemBook(inputId int, input entities.AddItemBookInput) error
 	UpdateStatusItemBook(id int, status int) error
@@ -109,4 +110,12 @@ func (s *itemBook) GetItemBookByIdBook(id int) ([]entities.ItemBook, error) {
 		return itembBooks, err
 	}
 	return itembBooks, nil
+}
+
+func (s *itemBook) GetItemBookByIdBookAvailable(id int) ([]entities.ItemBook, error) {
+	itemBooks, err := s.itemBookRepository.FIndByIdBookAvailable(id)
+	if err != nil {
+		return itemBooks, err
+	}
+	return itemBooks, nil
 }

@@ -10,6 +10,7 @@ type ItemBook interface {
 	FindAll() ([]entities.ItemBook, error)
 	FIndById(id int) (entities.ItemBook, error)
 	FIndByIdBook(id int) ([]entities.ItemBook, error)
+	FIndByIdBookAvailable(id int) ([]entities.ItemBook, error)
 	Save(itemBook entities.ItemBook) error
 	Update(itemBook entities.ItemBook) error
 	UpdateStatus(id int, status int) error
@@ -89,4 +90,16 @@ func (r *itemBook) FIndByIdBook(id int) ([]entities.ItemBook, error) {
 		return itemBooks, err
 	}
 	return itemBooks, nil
+}
+
+func (r *itemBook) FIndByIdBookAvailable(id int) ([]entities.ItemBook, error) {
+	var itemBooks []entities.ItemBook
+	err := r.db.Where("id_book", id).
+		Where("status", 1).
+		Select("id", "isbn", "id_book", "status").
+		Find(&itemBooks).Error
+	if err != nil {
+		return itemBooks, err
+	}
+	return itemBooks, err
 }
